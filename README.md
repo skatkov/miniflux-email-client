@@ -49,29 +49,25 @@ Linux and macOS
 
 Add a new line to the crontab with the following format:
 
-javascript
-
+```javascript
 MM HH * * * /path/to/launch.sh
-
+```
 Replace MM with the minute (00-59) and HH with the hour (00-23) you want the application to run every day.
 Windows
 
 Create a new task in the Task Scheduler to run the launch.sh script at the desired time every day.
 Using GitHub Actions
-
-    Create a new GitHub Actions workflow in your repository by following the instructions in the GitHub Actions section.
-
-    Store your sensitive information (credentials) as GitHub secrets.
-
-    The GitHub Action will run the Go application every day at the specified time.
+    - Create a new GitHub Actions workflow in your repository by following the instructions in the GitHub Actions section.
+    - Store your sensitive information (credentials) as GitHub secrets.
+    - The GitHub Action will run the Go application every day at the specified time.
 
 GitHub Actions
 
 To run the Go application in a GitHub Action every day at a specific time, create a new workflow file in your repository:
 
-    In your repository, create a directory named .github (if it doesn't already exist).
-    Inside the .github directory, create another directory named workflows.
-    Inside the workflows directory, create a new file named daily_run.yml.
+    - In your repository, create a directory named .github (if it doesn't already exist).
+    - Inside the .github directory, create another directory named workflows.
+    - Inside the workflows directory, create a new file named daily_run.yml.
 
 Add the following content to the daily_run.yml file:
 
