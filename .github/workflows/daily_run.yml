@@ -26,5 +26,4 @@ jobs:
         GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
         CATEGORIES: ${{ secrets.CATEGORIES }}
       run: |
-        ls -la
-        go run .
+        go run main.go
