@@ -27,5 +27,4 @@ jobs:
         CATEGORIES: ${{ secrets.CATEGORIES }}
         CGO_ENABLED: 0
       run: |
-        go build main.go
-        ./miniflux-email-updates
+        go run main.go
