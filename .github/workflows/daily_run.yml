@@ -25,6 +25,7 @@ jobs:
         GMAIL_EMAIL: ${{ secrets.GMAIL_EMAIL }}
         GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
         CATEGORY: ${{ secrets.CATEGORY }}
+        RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}
         CGO_ENABLED: 0
       run: |
         go run main.go

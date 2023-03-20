@@ -28,6 +28,7 @@ func main() {
 	minifluxURL := os.Getenv("MINIFLUX_URL")
 	minifluxUser := os.Getenv("MINIFLUX_USER")
 	minifluxPass := os.Getenv("MINIFLUX_PASS")
+	receiverEmail := os.Getenv("RECEIVER_EMAIL")
 	gmailEmail := os.Getenv("GMAIL_EMAIL")
 	gmailPassword := os.Getenv("GMAIL_PASSWORD")
 	category := os.Getenv("CATEGORY")
@@ -42,7 +43,7 @@ func main() {
 	}
 
 	emailBody := formatEmailBody(unreadEntries)
-	sendEmail(gmailEmail, gmailPassword, gmailEmail, emailBody)
+	sendEmail(gmailEmail, gmailPassword, receiverEmail, emailBody)
 
 	for _, entry := range unreadEntries {
 		markEntryAsRead(minifluxURL, minifluxUser, minifluxPass, entry.ID)
