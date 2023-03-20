@@ -57,17 +57,18 @@ Windows
 
 Create a new task in the Task Scheduler to run the launch.sh script at the desired time every day.
 Using GitHub Actions
-    - Create a new GitHub Actions workflow in your repository by following the instructions in the GitHub Actions section.
-    - Store your sensitive information (credentials) as GitHub secrets.
-    - The GitHub Action will run the Go application every day at the specified time.
+
+- Create a new GitHub Actions workflow in your repository by following the instructions in the GitHub Actions section.
+- Store your sensitive information (credentials) as GitHub secrets.
+- The GitHub Action will run the Go application every day at the specified time.
 
 GitHub Actions
 
 To run the Go application in a GitHub Action every day at a specific time, create a new workflow file in your repository:
 
-    - In your repository, create a directory named .github (if it doesn't already exist).
-    - Inside the .github directory, create another directory named workflows.
-    - Inside the workflows directory, create a new file named daily_run.yml.
+- In your repository, create a directory named .github (if it doesn't already exist).
+- Inside the .github directory, create another directory named workflows.
+- Inside the workflows directory, create a new file named daily_run.yml.
 
 Add the following content to the daily_run.yml file:
 
@@ -108,26 +109,26 @@ This GitHub Action will run the Go application every day at the specified time (
 
 Additionally, store your sensitive information (credentials) as GitHub secrets. To do this, follow these steps:
 
-    In your GitHub repository, click the "Settings" tab.
-    In the left sidebar, click "Secrets".
-    Click the "New repository secret" button.
-    Add each environment variable (e.g., MINIFLUX_URL, MINIFLUX_USER, MINIFLUX_PASS, GMAIL_EMAIL, GMAIL_PASSWORD, and CATEGORIES) as a separate secret with the corresponding value.
+- In your GitHub repository, click the "Settings" tab.
+- In the left sidebar, click "Secrets".
+- Click the "New repository secret" button.
+- Add each environment variable (e.g., MINIFLUX_URL, MINIFLUX_USER, MINIFLUX_PASS, GMAIL_EMAIL, GMAIL_PASSWORD, and CATEGORIES) as a separate secret with the corresponding value.
 
 Once you have set up the secrets, the GitHub Action will use them when running the workflow.
 Releasing with GoReleaser
 
 To release the Go application using GoReleaser, follow these steps:
 
-    Install GoReleaser and UPX.
-    Update the goreleaser.yml file with the appropriate information for your repository.
-    Create a new Git tag for the release:
+- Install GoReleaser and UPX.
+- Update the goreleaser.yml file with the appropriate information for your repository.
+- Create a new Git tag for the release:
 
 ```bash
-
 git tag -a vX.Y.Z -m "Release vX.Y.Z"
 git push origin vX.Y.Z
 ```
-    Run GoReleaser:
+
+Run GoReleaser:
 
 ```bash
 
