@@ -1,0 +1,29 @@
+name: Daily Run
+
+on:
+  schedule:
+    - cron: '0 9 * * *'
+
+jobs:
+  run_app:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.17
+
+    - name: Build and run the application
+      env:
+        MINIFLUX_URL: ${{ secrets.MINIFLUX_URL }}
+        MINIFLUX_USER: ${{ secrets.MINIFLUX_USER }}
+        MINIFLUX_PASS: ${{ secrets.MINIFLUX_PASS }}
+        GMAIL_EMAIL: ${{ secrets.GMAIL_EMAIL }}
+        GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+        CATEGORIES: ${{ secrets.CATEGORIES }}
+      run: |
+        go build
+        ./miniflux-email-updates
