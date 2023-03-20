@@ -15,10 +15,11 @@ This Go application fetches the latest unread entries from your Miniflux instanc
 ```bash
 git clone https://github.com/your-username/your-repo.git
 cd your-repo
+```
 
-    Set the required environment variables:
+Set the required environment variables:
 
-bash
+```bash
 
 export MINIFLUX_URL=https://your-miniflux-instance.com
 export MINIFLUX_USER=your-miniflux-username
