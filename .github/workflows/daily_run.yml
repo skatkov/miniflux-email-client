@@ -26,4 +26,5 @@ jobs:
         GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
         CATEGORIES: ${{ secrets.CATEGORIES }}
       run: |
-        go run -ldflags '-extldflags "-pie"' main.go
+        go build main.go
+        ./miniflux-email-updates
