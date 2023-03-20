@@ -93,7 +93,6 @@ func formatEmailBody(entries []Entry) string {
 
 	for _, entry := range entries {
 		buffer.WriteString(fmt.Sprintf("<h2><a href=\"%s\">%s</a></h2>", entry.URL, entry.Title))
-		buffer.WriteString(entry.Content)
 		buffer.WriteString("<hr>")
 	}
 
