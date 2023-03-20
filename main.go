@@ -30,13 +30,11 @@ func main() {
 	minifluxPass := os.Getenv("MINIFLUX_PASS")
 	gmailEmail := os.Getenv("GMAIL_EMAIL")
 	gmailPassword := os.Getenv("GMAIL_PASSWORD")
-	categories := strings.Split(os.Getenv("CATEGORIES"), ",")
+	category := os.Getenv("CATEGORY")
 
 	unreadEntries := make([]Entry, 0)
-	for _, category := range categories {
-		categoryEntries := fetchUnreadEntries(minifluxURL, minifluxUser, minifluxPass, category)
-		unreadEntries = append(unreadEntries, categoryEntries...)
-	}
+	categoryEntries := fetchUnreadEntries(minifluxURL, minifluxUser, minifluxPass, category)
+	unreadEntries = append(unreadEntries, categoryEntries...)
 
 	if len(unreadEntries) == 0 {
 		log.Println("No unread entries found")
