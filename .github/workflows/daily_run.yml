@@ -26,6 +26,4 @@ jobs:
         GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
         CATEGORIES: ${{ secrets.CATEGORIES }}
       run:
-        go mod init
-        go build
-        ./miniflux-email-updates
+        go run .
