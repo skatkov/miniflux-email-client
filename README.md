@@ -26,23 +26,24 @@ export MINIFLUX_PASS=your-miniflux-password
 export GMAIL_EMAIL=your-gmail-email@example.com
 export GMAIL_PASSWORD=your-gmail-password
 export CATEGORIES=news,technology
-
+```
 Note: You can also set the environment variables directly in the Go application or use a .env file and load them using a package like godotenv.
 
-    Build the application:
+## Build the application:
 
-bash
+```bash
 
 go build
+```
+##  Run the application:
 
-    Run the application:
-
-bash
+```bash
 
 ./miniflux-email-updates
+```
 
-Running the Application Daily
-Locally
+## Running the Application Daily
+### Locally
 Linux and macOS
 
 Add a new line to the crontab with the following format:
@@ -73,7 +74,7 @@ To run the Go application in a GitHub Action every day at a specific time, creat
 
 Add the following content to the daily_run.yml file:
 
-yaml
+```yaml
 
 name: Daily Run
 
@@ -104,6 +105,7 @@ jobs:
       run: |
         go build
         ./miniflux-email-updates
+```
 
 This GitHub Action will run the Go application every day at the specified time (UTC). Make sure to replace the Go version in the setup-go action with the version you are using in your project, if different from 1.17.
 
@@ -123,15 +125,15 @@ To release the Go application using GoReleaser, follow these steps:
     Update the goreleaser.yml file with the appropriate information for your repository.
     Create a new Git tag for the release:
 
-bash
+```bash
 
 git tag -a vX.Y.Z -m "Release vX.Y.Z"
 git push origin vX.Y.Z
-
+```
     Run GoReleaser:
 
-bash
+```bash
 
 goreleaser release --rm-dist
-
+```
 This will create a new release, compress the binary using UPX, and publish it to your personal Homebrew tap.
