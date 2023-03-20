@@ -62,7 +62,7 @@ Using GitHub Actions
 - Store your sensitive information (credentials) as GitHub secrets.
 - The GitHub Action will run the Go application every day at the specified time.
 
-GitHub Actions
+### GitHub Actions
 
 To run the Go application in a GitHub Action every day at a specific time, create a new workflow file in your repository:
 
