@@ -26,7 +26,7 @@ export MINIFLUX_USER=your-miniflux-username
 export MINIFLUX_PASS=your-miniflux-password
 export GMAIL_EMAIL=your-gmail-email@example.com
 export GMAIL_PASSWORD=your-gmail-password
-export CATEGORIES=news,technology
+export CATEGORY=news
 ```
 Note: You can also set the environment variables directly in the Go application or use a .env file and load them using a package like godotenv.
 
@@ -99,7 +99,7 @@ jobs:
         MINIFLUX_PASS: ${{ secrets.MINFLUX_PASS }}
         GMAIL_EMAIL: ${{ secrets.GMAIL_EMAIL }}
         GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
-        CATEGORIES: ${{ secrets.CATEGORIES }}
+        CATEGORY: ${{ secrets.CATEGORY }}
       run: |
         go build
         ./miniflux-email-updates
@@ -112,7 +112,7 @@ Additionally, store your sensitive information (credentials) as GitHub secrets. 
 - In your GitHub repository, click the "Settings" tab.
 - In the left sidebar, click "Secrets".
 - Click the "New repository secret" button.
-- Add each environment variable (e.g., MINIFLUX_URL, MINIFLUX_USER, MINIFLUX_PASS, GMAIL_EMAIL, GMAIL_PASSWORD, and CATEGORIES) as a separate secret with the corresponding value.
+- Add each environment variable (e.g., MINIFLUX_URL, MINIFLUX_USER, MINIFLUX_PASS, GMAIL_EMAIL, GMAIL_PASSWORD, and CATEGORY) as a separate secret with the corresponding value.
 
 Once you have set up the secrets, the GitHub Action will use them when running the workflow.
 Releasing with GoReleaser

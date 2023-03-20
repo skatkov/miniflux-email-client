@@ -17,14 +17,14 @@ jobs:
       with:
         go-version: 1.20
 
-    - name: Build and run the application
+    - name: Run application
       env:
         MINIFLUX_URL: ${{ secrets.MINIFLUX_URL }}
         MINIFLUX_USER: ${{ secrets.MINIFLUX_USER }}
         MINIFLUX_PASS: ${{ secrets.MINIFLUX_PASS }}
         GMAIL_EMAIL: ${{ secrets.GMAIL_EMAIL }}
         GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
-        CATEGORIES: ${{ secrets.CATEGORIES }}
+        CATEGORY: ${{ secrets.CATEGORY }}
         CGO_ENABLED: 0
       run: |
         go run main.go
