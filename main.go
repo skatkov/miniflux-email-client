@@ -79,6 +79,12 @@ func fetchUnreadEntries(minifluxURL, minifluxUser, minifluxPass, category string
 		log.Fatalf("Error decoding entries response: %v", err)
 	}
 
+	// Add logging for fetched entries and their count
+	log.Printf("Fetched %d entries for category: %s", len(entriesResponse.Entries), category)
+	for i, entry := range entriesResponse.Entries {
+		log.Printf("Entry %d: %+v", i+1, entry)
+	}
+
 	return entriesResponse.Entries
 }
 
