@@ -43,6 +43,11 @@ go build
 ./miniflux-email-updates
 ```
 
+
+## GMAIL STMP
+Configure gmail smtp based ona following guide:
+https://community.cloudflare.com/t/solved-how-to-use-gmail-smtp-to-send-from-an-email-address-which-uses-cloudflare-email-routing/382769/2
+
 ## Running the Application Daily
 ### Locally
 Linux and macOS
