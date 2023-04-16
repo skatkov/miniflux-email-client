@@ -100,7 +100,7 @@ func sendEmail(gmailEmail, gmailPassword, toEmail, body string) {
 	subject := fmt.Sprintf("📰 News Updates - %s", currentDate)
 
 	to := []string{toEmail}
-	msg := []byte("To: " + toEmail + "\r\n" +
+	msg := []byte("To: <" + toEmail + ">\r\n" +
 		"Subject: " + subject + "\r\n" +
 		"Content-Type: text/html; charset=UTF-8" + "\r\n" +
 		"\r\n" +
