@@ -43,7 +43,7 @@ func main() {
 	}
 
 	emailBody := formatEmailBody(unreadEntries)
-	sendEmail(gmailEmail, gmailPassword, receiverEmail, emailBody)
+	sendEmail(gmailEmail, gmailPassword, "contact@skatkov.com", emailBody)
 
 	for _, entry := range unreadEntries {
 		markEntryAsRead(minifluxURL, minifluxUser, minifluxPass, entry.ID)
