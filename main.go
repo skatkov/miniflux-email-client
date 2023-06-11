@@ -28,7 +28,7 @@ func main() {
 	minifluxURL := os.Getenv("MINIFLUX_URL")
 	minifluxUser := os.Getenv("MINIFLUX_USER")
 	minifluxPass := os.Getenv("MINIFLUX_PASS")
-	// receiverEmail := os.Getenv("RECEIVER_EMAIL")
+	receiverEmail := os.Getenv("RECEIVER_EMAIL")
 	gmailEmail := os.Getenv("GMAIL_EMAIL")
 	gmailPassword := os.Getenv("GMAIL_PASSWORD")
 	category := os.Getenv("CATEGORY")
@@ -43,7 +43,7 @@ func main() {
 	}
 
 	emailBody := formatEmailBody(unreadEntries)
-	sendEmail(gmailEmail, gmailPassword, "contact@skatkov.com", emailBody)
+	sendEmail(gmailEmail, gmailPassword, receiverEmail, emailBody)
 
 	for _, entry := range unreadEntries {
 		markEntryAsRead(minifluxURL, minifluxUser, minifluxPass, entry.ID)
@@ -136,6 +136,6 @@ func markEntryAsRead(minifluxURL, minifluxUser, minifluxPass string, entryID int
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusNoContent {
-		log.Fatalf("Error marking entry as read. Status: %d", resp.StatusCode)
+		log.Fatalf("Error marking entry as read. Status: %d /n %e", resp.StatusCode, resp.Body)
 	}
 }
