@@ -33,6 +33,8 @@ func main() {
 	gmailPassword := os.Getenv("GMAIL_PASSWORD")
 	category := os.Getenv("CATEGORY")
 
+	retrieveCategoryID(minifluxURL, minifluxUser, minifluxPass, category)
+
 	unreadEntries := make([]Entry, 0)
 	categoryEntries := fetchUnreadEntries(minifluxURL, minifluxUser, minifluxPass, category)
 	unreadEntries = append(unreadEntries, categoryEntries...)
@@ -48,6 +50,38 @@ func main() {
 	for _, entry := range unreadEntries {
 		markEntryAsRead(minifluxURL, minifluxUser, minifluxPass, entry.ID)
 	}
+}
+
+func retrieveCategoryID(minifluxURL, minifluxUser, minifluxPass, category string) string {
+	client := &http.Client{}
+	url := minifluxURL + "/v1/categories"
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		log.Fatalf("Error fetching categories: %v", err)
+	}
+	req.SetBasicAuth(minifluxUser, minifluxPass)
+
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Fatalf("Error fetching categories: %v", err)
+	}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		log.Fatalf("Error fetching entries. Status: %d", resp.StatusCode)
+	}
+
+	bodyBytes, err := ioutil.ReadAll(resp.Body)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(bodyBytes)
+
+	return string(bodyBytes)
 }
 
 func fetchUnreadEntries(minifluxURL, minifluxUser, minifluxPass, category string) []Entry {
