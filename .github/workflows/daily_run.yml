@@ -15,10 +15,17 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
-        go-version: 1.20.2
+        go-version: latest
 
     - name: Run application
       env:
+        MINIFLUX_URL: ${{ secrets.MINIFLUX_URL }}
+        MINIFLUX_USER: ${{ secrets.MINIFLUX_USER }}
+        MINIFLUX_PASS: ${{ secrets.MINIFLUX_PASS }}
+        GMAIL_EMAIL: ${{ secrets.GMAIL_EMAIL }}
+        GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+        CATEGORY: ${{ variables.CATEGORY }}
+        RECEIVER_EMAIL: ${{ variables.RECEIVER_EMAIL }}}
         CGO_ENABLED: 0
       run: |
         go run main.go
