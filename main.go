@@ -52,7 +52,7 @@ func main() {
 	}
 }
 
-func retrieveCategoryID(minifluxURL, minifluxUser, minifluxPass, category string) string {
+func retrieveCategoryID(minifluxURL, minifluxUser, minifluxPass, category string) {
 	client := &http.Client{}
 	url := minifluxURL + "/v1/categories"
 
@@ -73,15 +73,7 @@ func retrieveCategoryID(minifluxURL, minifluxUser, minifluxPass, category string
 		log.Fatalf("Error fetching entries. Status: %d", resp.StatusCode)
 	}
 
-	bodyBytes, err := ioutil.ReadAll(resp.Body)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println(bodyBytes)
-
-	return string(bodyBytes)
+	fmt.Println(resp.Body)
 }
 
 func fetchUnreadEntries(minifluxURL, minifluxUser, minifluxPass, category string) []Entry {
