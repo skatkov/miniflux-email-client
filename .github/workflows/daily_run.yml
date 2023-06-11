@@ -15,7 +15,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
-        go-version: latest
+        go-version: '>=1.20.2'
 
     - name: Run application
       env:
@@ -24,7 +24,7 @@ jobs:
         MINIFLUX_PASS: ${{ secrets.MINIFLUX_PASS }}
         GMAIL_EMAIL: ${{ secrets.GMAIL_EMAIL }}
         GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
-        CATEGORY: 'daily'
+        CATEGORY: daily
         RECEIVER_EMAIL: contact@skatkov.com
         CGO_ENABLED: 0
       run: |
