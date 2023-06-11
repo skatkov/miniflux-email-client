@@ -24,8 +24,8 @@ jobs:
         MINIFLUX_PASS: ${{ secrets.MINIFLUX_PASS }}
         GMAIL_EMAIL: ${{ secrets.GMAIL_EMAIL }}
         GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
-        CATEGORY: ${{ variables.CATEGORY }}
-        RECEIVER_EMAIL: ${{ variables.RECEIVER_EMAIL }}}
+        CATEGORY: 'daily'
+        RECEIVER_EMAIL: contact@skatkov.com
         CGO_ENABLED: 0
       run: |
         go run main.go
