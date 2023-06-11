@@ -99,6 +99,8 @@ func sendEmail(gmailEmail, gmailPassword, toEmail, body string) {
 	currentDate := time.Now().Format("2006-01-02")
 	subject := fmt.Sprintf("📰 News Updates - %s", currentDate)
 
+	fmt.Println("sending email to: ", toEmail)
+
 	to := []string{toEmail}
 	msg := []byte("To: <" + toEmail + ">\r\n" +
 		"Subject: " + subject + "\r\n" +
