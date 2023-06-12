@@ -22,11 +22,10 @@ Set the required environment variables:
 ```bash
 
 export MINIFLUX_URL=https://your-miniflux-instance.com
-export MINIFLUX_USER=your-miniflux-username
-export MINIFLUX_PASS=your-miniflux-password
+export MINIFLUX_TOKEN=your-miniflux-username
 export GMAIL_EMAIL=your-gmail-email@example.com
 export GMAIL_PASSWORD=your-gmail-password
-export CATEGORY=news
+export CATEGORY=daily
 ```
 Note: You can also set the environment variables directly in the Go application or use a .env file and load them using a package like godotenv.
 
