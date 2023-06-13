@@ -46,12 +46,12 @@ func main() {
 		}
 	}
 
-	entries, err := client.CategoryFeeds(category_id)
+	entries, err := client.CategoryEntries(category_id, &miniflux.Filter{Status: miniflux.EntryStatusUnread, CategoryID: category_id})
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	if len(entries) == 0 {
+	if entries.Total == 0 {
 		log.Println("No unread entries found")
 		return
 	}
@@ -65,11 +65,12 @@ func main() {
 	}
 }
 
-func formatEmailBody(entries miniflux.Feeds) string {
+func formatEmailBody(entries *miniflux.EntryResultSet) string {
 	var buffer bytes.Buffer
 
-	for _, entry := range entries {
-		buffer.WriteString(fmt.Sprintf("<h2><a href=\"%s\">%s</a></h2>", entry.FeedURL, entry.Title))
+	for _, entry := range entries.Entries {
+		buffer.WriteString(fmt.Sprintf("<h2><a href=\"%s\">%s</a></h2><br/>", entry.URL, entry.Title))
+		buffer.WriteString(fmt.Sprintf("<div>%s</div>", entry.Content))
 		buffer.WriteString("<hr>")
 	}
 

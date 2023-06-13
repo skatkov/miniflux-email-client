@@ -1,15 +1,16 @@
 #!/bin/bash
 
 # Set environment variables
-export MINIFLUX_URL="https://your-miniflux-instance.com"
-export MINIFLUX_USER="your-miniflux-username"
-export MINIFLUX_PASS="your-miniflux-password"
-export GMAIL_EMAIL="your-gmail-email@example.com"
-export GMAIL_PASSWORD="your-gmail-password"
+export MINIFLUX_URL="https://reader.miniflux.app/v1"
+export MINIFLUX_TOKEN="token-miniflux"
+export GMAIL_EMAIL="your-gmail-email"
+
+export GMAIL_PASSWORD="your-password"
 export CATEGORY="daily"
+export RECEIVER_EMAIL="contact@skatkov.com"
 
 # Build the application
 go build
 
 # Run the application
-./miniflux-email-updates
+go run .
