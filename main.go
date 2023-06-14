@@ -39,12 +39,13 @@ func main() {
 
 	var category_id int64
 
-	// print out category that has daily value
 	for _, category := range categories {
 		if category.Title == selected_category {
 			category_id = category.ID
 		}
 	}
+
+	fmt.Printf("Detected category_id is %d", category_id)
 
 	entries, err := client.CategoryEntries(category_id, &miniflux.Filter{Status: miniflux.EntryStatusUnread, CategoryID: category_id})
 	if err != nil {
@@ -66,6 +67,8 @@ func main() {
 	err = client.MarkCategoryAsRead(category_id)
 	if err != nil {
 		fmt.Println(err)
+	} else {
+		fmt.Println("Category marked as read")
 	}
 }
 
