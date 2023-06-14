@@ -57,7 +57,11 @@ func main() {
 	}
 
 	emailBody := formatEmailBody(entries)
-	sendEmail(gmailEmail, gmailPassword, receiverEmail, emailBody)
+	err = sendEmail(gmailEmail, gmailPassword, receiverEmail, emailBody)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
 	err = client.MarkCategoryAsRead(category_id)
 	if err != nil {
@@ -77,7 +81,7 @@ func formatEmailBody(entries *miniflux.EntryResultSet) string {
 	return buffer.String()
 }
 
-func sendEmail(gmailEmail, gmailPassword, toEmail, body string) {
+func sendEmail(gmailEmail, gmailPassword, toEmail, body string) error {
 	auth := smtp.PlainAuth("", gmailEmail, gmailPassword, "smtp.gmail.com")
 
 	currentDate := time.Now().Format("2006-01-02")
@@ -92,10 +96,5 @@ func sendEmail(gmailEmail, gmailPassword, toEmail, body string) {
 		"\r\n" +
 		body)
 
-	err := smtp.SendMail("smtp.gmail.com:587", auth, gmailEmail, to, msg)
-	if err != nil {
-		log.Fatalf("Error sending email: %v", err)
-	} else {
-		log.Println("Email sent successfully")
-	}
+	return smtp.SendMail("smtp.gmail.com:587", auth, gmailEmail, to, msg)
 }
