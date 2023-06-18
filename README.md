@@ -1,14 +1,12 @@
 # Miniflux Email Client
 Sends RSS updates from miniflux to your email. 
 
-This client is a minimal self-hosted version of mailbrew, briefcake and tacodigest. It doesn't require any server or email provider, but relies on free github action and gmail smtp.
-
-**warning** to enable smtp support in GMAIL, you'll have to reduce security of that account. Please be sure to not use you're main account for that.
+This client is a minimal self-hosted version of mailbrew, briefcake and tacodigest. It doesn't require any server or email provider, but relies on free github action and a gmail account.
 
 ## Prerequisites
 
 - A Miniflux instance with an account
-- A Gmail account with "Less secure apps" access enabled or an App Password generated
+- A Gmail account, preferably not you're main account.
 
 ## Setup
 
