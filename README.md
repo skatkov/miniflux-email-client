@@ -15,10 +15,10 @@ This client is a minimal self-hosted version of mailbrew, briefcake and tacodige
 5. Add github/action secrets
 
 
-# Github Action
+## Github Action
 Every 3 months github will ask if you want to keep running daily actions. Click "yes", if you want to continue receiving updates.
 
-# Maintenance
+## Maintenance
 This is just a proof-of-concept, works for me kind of thing. I might improve this further, depending on my own usage.
 
 Everyone is free to do whatever with this, if you plan to return back PR's -- I'll be happy to review.
