@@ -17,24 +17,35 @@ type AdapterInteface interface {
 	formatBody(*client.EntryResultSet) string
 }
 
+type MimeType string
+
+const (
+	HTML  MimeType = "text/html"
+	Plain MimeType = "text/plain"
+)
+
 type EmailAdapter struct {
-	content_type  string
+	content_type  MimeType
 	smtp_server   string
-	smtp_address  string
+	smtp_port     uint16
 	smtp_email    string
 	smtp_password string
 }
 
-func NewEmailer(adapter_name string) AdapterInteface {
+func NewEmailer(adapter_name string, content_type MimeType) AdapterInteface {
 	if adapter_name != "gmail" {
 		// TODO: support more adapters, not just GMAIL.
 		return nil
 	}
 
+	if len(content_type) > 0 {
+		content_type = HTML
+	}
+
 	return &EmailAdapter{
-		content_type:  "html", // TODO: should also support "text" as content type.
+		content_type:  content_type, // TODO: should also support "text" as content type.
 		smtp_server:   "smtp.gmail.com",
-		smtp_address:  "smtp.gmail.com:587",
+		smtp_port:     587,
 		smtp_password: os.Getenv("GMAIL_PASSWORD"),
 		smtp_email:    os.Getenv("GMAIL_EMAIL"),
 	}
@@ -47,11 +58,12 @@ func (a *EmailAdapter) auth() smtp.Auth {
 func (a *EmailAdapter) SendEmail(toEmail string, entries *miniflux.EntryResultSet) error {
 	msg := []byte("To: <" + toEmail + ">\r\n" +
 		"Subject: " + a.subject() + "\r\n" +
-		"Content-Type: text/html; charset=UTF-8" + "\r\n" +
+		"Content-Type: " + string(a.content_type) + "; charset=UTF-8" + "\r\n" +
 		"\r\n" +
 		a.formatBody(entries))
+	address := fmt.Sprintf("%s:%d", a.smtp_server, a.smtp_port)
 
-	return smtp.SendMail(a.smtp_address, a.auth(), a.smtp_email, []string{toEmail}, msg)
+	return smtp.SendMail(address, a.auth(), a.smtp_email, []string{toEmail}, msg)
 }
 
 func (a *EmailAdapter) subject() string {
