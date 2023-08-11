@@ -2,7 +2,6 @@ package miniflux_email_client
 
 import (
 	"errors"
-	"fmt"
 	"os"
 
 	miniflux "miniflux.app/client"
@@ -24,7 +23,7 @@ func NewClient() *minifluxClient {
 func (c *minifluxClient) GetUnreadEntries() (*miniflux.EntryResultSet, error) {
 	categories, err := c.miniflux.Categories()
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
 
 	// print out category that has daily value

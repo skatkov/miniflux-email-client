@@ -22,14 +22,17 @@ func main() {
 		return
 	}
 
-	fmt.Println("sending email to: ", receiverEmail)
+	fmt.Printf("sending email to: %s", receiverEmail)
 	err = mailer.SendEmail(receiverEmail, entries)
 
 	if err != nil {
-		err = client.MarkAsRead()
-
-		if err != nil {
-			fmt.Println(err)
-		}
+		fmt.Println(err)
+		return
 	}
+
+	err = client.MarkAsRead()
+	if err != nil {
+		fmt.Println(err)
+	}
+
 }
