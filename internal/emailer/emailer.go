@@ -2,9 +2,11 @@ package emailer
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"net/smtp"
 	"os"
+	"strconv"
 	"time"
 
 	"miniflux.app/client"
@@ -14,7 +16,7 @@ import (
 type AdapterInteface interface {
 	SendEmail(string, *miniflux.EntryResultSet) error
 	subject() string
-	formatBody(*client.EntryResultSet) string
+	formatBody(*client.EntryResultSet) (string, error)
 }
 
 type MimeType string
@@ -24,60 +26,93 @@ const (
 	Plain MimeType = "text/plain"
 )
 
-type EmailAdapter struct {
-	content_type  MimeType
-	smtp_server   string
-	smtp_port     uint16
-	smtp_email    string
-	smtp_password string
+type SMTPAdapter struct {
+	content_type MimeType
+	server       string
+	port         uint16
+	email        string
+	password     string
 }
 
-func NewEmailer(adapter_name string, content_type MimeType) AdapterInteface {
-	if adapter_name != "gmail" {
-		// TODO: support more adapters, not just GMAIL.
-		return nil
-	}
+var (
+	password string
+	email    string
+	server   string
+)
 
+func NewEmailer(content_type MimeType) AdapterInteface {
 	if len(content_type) > 0 {
-		content_type = HTML
+		content_type = Plain
+	}
+	// TODO: we should dperecate usage of GMAIL_* env variables.
+	if password = os.Getenv("SMTP_PASSWORD"); password == "" {
+		password = os.Getenv("GMAIL_PASSWORD")
 	}
 
-	return &EmailAdapter{
-		content_type:  content_type, // TODO: should also support "text" as content type.
-		smtp_server:   "smtp.gmail.com",
-		smtp_port:     587,
-		smtp_password: os.Getenv("GMAIL_PASSWORD"),
-		smtp_email:    os.Getenv("GMAIL_EMAIL"),
+	if email = os.Getenv("SMTP_EMAIL"); email == "" {
+		email = os.Getenv("GMAIL_EMAIL")
+	}
+
+	if server := os.Getenv("SMTP_SERVER"); server == "" {
+		server = "smtp.gmail.com"
+	}
+
+	port64, err := strconv.ParseUint(os.Getenv("SMTP_PORT"), 10, 16)
+	if err != nil {
+		fmt.Printf("Using \"587\" as default port, because of error: %s", err)
+		port64 = 587
+	}
+
+	return &SMTPAdapter{
+		content_type: content_type,
+		server:       server,
+		port:         uint16(port64),
+		password:     password,
+		email:        email,
 	}
 }
 
-func (a *EmailAdapter) auth() smtp.Auth {
-	return smtp.PlainAuth("", a.smtp_email, a.smtp_password, a.smtp_server)
+func (a *SMTPAdapter) auth() smtp.Auth {
+	return smtp.PlainAuth("", a.email, a.password, a.server)
 }
 
-func (a *EmailAdapter) SendEmail(toEmail string, entries *miniflux.EntryResultSet) error {
+func (a *SMTPAdapter) SendEmail(toEmail string, entries *miniflux.EntryResultSet) error {
+	body, err := a.formatBody(entries)
+	if err != nil {
+		return err
+	}
 	msg := []byte("To: <" + toEmail + ">\r\n" +
 		"Subject: " + a.subject() + "\r\n" +
-		"Content-Type: " + string(a.content_type) + "; charset=UTF-8" + "\r\n" +
-		"\r\n" +
-		a.formatBody(entries))
-	address := fmt.Sprintf("%s:%d", a.smtp_server, a.smtp_port)
+		"Content-Type: " + string(a.content_type) + "; charset=UTF-8" +
+		"\r\n" + body)
+	address := fmt.Sprintf("%s:%d", a.server, a.port)
 
-	return smtp.SendMail(address, a.auth(), a.smtp_email, []string{toEmail}, msg)
+	return smtp.SendMail(address, a.auth(), a.email, []string{toEmail}, msg)
 }
 
-func (a *EmailAdapter) subject() string {
+func (a *SMTPAdapter) subject() string {
 	return fmt.Sprintf("📰 RSS Updates - %s", time.Now().Format("2006-01-02"))
 }
 
-func (a *EmailAdapter) formatBody(entries *miniflux.EntryResultSet) string {
+func (a *SMTPAdapter) formatBody(entries *miniflux.EntryResultSet) (string, error) {
 	var buffer bytes.Buffer
 
-	for _, entry := range entries.Entries {
-		buffer.WriteString(fmt.Sprintf("<h2><a href=\"%s\">%s</a></h2><br/>", entry.URL, entry.Title))
-		buffer.WriteString(fmt.Sprintf("<div>%s</div>", entry.Content))
-		buffer.WriteString("<hr>")
+	switch a.content_type {
+	case HTML:
+		for _, entry := range entries.Entries {
+			buffer.WriteString(fmt.Sprintf("<h2><a href=\"%s\">%s</a></h2><br/>", entry.URL, entry.Title))
+			buffer.WriteString(fmt.Sprintf("<div>%s</div>", entry.Content))
+			buffer.WriteString("<hr>")
+		}
+	case Plain:
+		for _, entry := range entries.Entries {
+			buffer.WriteString(fmt.Sprintf("%s - %s", entry.URL, entry.Title))
+			buffer.WriteString(fmt.Sprintf("--------------\n%s\n--------------", entry.Content))
+			buffer.WriteString("\n")
+		}
+	default:
+		return "", errors.New("invalid content type")
 	}
 
-	return buffer.String()
+	return buffer.String(), nil
 }

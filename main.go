@@ -14,7 +14,7 @@ var (
 
 func main() {
 	client := miniflux.NewClient()
-	mailer := emailer.NewEmailer("gmail")
+	mailer := emailer.NewEmailer(emailer.Plain)
 	entries, err := client.GetUnreadEntries()
 
 	if err != nil {
