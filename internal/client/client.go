@@ -36,7 +36,7 @@ func (c *minifluxClient) GetUnreadEntries() (*miniflux.EntryResultSet, error) {
 
 	entries, err := c.miniflux.CategoryEntries(c.category_id, &miniflux.Filter{Status: miniflux.EntryStatusUnread, CategoryID: c.category_id})
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
 
 	if entries.Total == 0 {
