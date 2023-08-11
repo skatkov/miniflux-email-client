@@ -14,7 +14,7 @@ var (
 
 func main() {
 	client := miniflux.NewClient()
-	mailer := emailer.NewEmailer()
+	mailer := emailer.NewEmailer("gmail")
 	entries, err := client.GetUnreadEntries()
 
 	if err != nil {
@@ -23,7 +23,7 @@ func main() {
 	}
 
 	fmt.Println("sending email to: ", receiverEmail)
-	err = mailer.Send(receiverEmail, entries)
+	err = mailer.SendEmail(receiverEmail, entries)
 
 	if err != nil {
 		err = client.MarkAsRead()

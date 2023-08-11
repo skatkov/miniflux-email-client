@@ -7,50 +7,58 @@ import (
 	"os"
 	"time"
 
+	"miniflux.app/client"
 	miniflux "miniflux.app/client"
 )
 
-type Emailer struct {
-	adapter      string
-	content_type string
+type AdapterInteface interface {
+	SendEmail(string, *miniflux.EntryResultSet) error
+	subject() string
+	formatBody(*client.EntryResultSet) string
 }
 
-const smtp_server = "smtp.gmail.com"
-const smtp_address = "smtp.gmail.com:587"
+type EmailAdapter struct {
+	content_type  string
+	smtp_server   string
+	smtp_address  string
+	smtp_email    string
+	smtp_password string
+}
 
-var smtp_password = os.Getenv("GMAIL_PASSWORD")
-var smtp_email = os.Getenv("GMAIL_EMAIL")
+func NewEmailer(adapter_name string) AdapterInteface {
+	if adapter_name != "gmail" {
+		// TODO: support more adapters, not just GMAIL.
+		return nil
+	}
 
-func NewEmailer() Emailer {
-	return Emailer{
-		adapter:      "gmail", // TODO: would be great to support more adapter, not just GMAIL SMTP.
-		content_type: "html",  // TODO: should also support "text" as content type.
+	return &EmailAdapter{
+		content_type:  "html", // TODO: should also support "text" as content type.
+		smtp_server:   "smtp.gmail.com",
+		smtp_address:  "smtp.gmail.com:587",
+		smtp_password: os.Getenv("GMAIL_PASSWORD"),
+		smtp_email:    os.Getenv("GMAIL_EMAIL"),
 	}
 }
 
-func (e Emailer) Send(toEmail string, entries *miniflux.EntryResultSet) error {
-	return sendEmail(toEmail, entries)
+func (a *EmailAdapter) auth() smtp.Auth {
+	return smtp.PlainAuth("", a.smtp_email, a.smtp_password, a.smtp_server)
 }
 
-func auth() smtp.Auth {
-	return smtp.PlainAuth("", smtp_email, smtp_password, smtp_server)
-}
-
-func sendEmail(toEmail string, entries *miniflux.EntryResultSet) error {
+func (a *EmailAdapter) SendEmail(toEmail string, entries *miniflux.EntryResultSet) error {
 	msg := []byte("To: <" + toEmail + ">\r\n" +
-		"Subject: " + subject() + "\r\n" +
+		"Subject: " + a.subject() + "\r\n" +
 		"Content-Type: text/html; charset=UTF-8" + "\r\n" +
 		"\r\n" +
-		formatBody(entries))
+		a.formatBody(entries))
 
-	return smtp.SendMail(smtp_address, auth(), smtp_email, []string{toEmail}, msg)
+	return smtp.SendMail(a.smtp_address, a.auth(), a.smtp_email, []string{toEmail}, msg)
 }
 
-func subject() string {
+func (a *EmailAdapter) subject() string {
 	return fmt.Sprintf("📰 RSS Updates - %s", time.Now().Format("2006-01-02"))
 }
 
-func formatBody(entries *miniflux.EntryResultSet) string {
+func (a *EmailAdapter) formatBody(entries *miniflux.EntryResultSet) string {
 	var buffer bytes.Buffer
 
 	for _, entry := range entries.Entries {
