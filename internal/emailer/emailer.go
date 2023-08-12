@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net/smtp"
 	"os"
-	"strconv"
 	"time"
 
 	"miniflux.app/client"
@@ -57,16 +56,10 @@ func NewEmailer(content_type MimeType) AdapterInteface {
 		server = "smtp.gmail.com"
 	}
 
-	port64, err := strconv.ParseUint(os.Getenv("SMTP_PORT"), 10, 16)
-	if err != nil {
-		fmt.Printf("Using \"587\" as default port, because of error: %s", err)
-		port64 = 587
-	}
-
 	return &SMTPAdapter{
 		content_type: content_type,
 		server:       server,
-		port:         uint16(port64),
+		port:         587, //TODO: should be possible to configure through ENV variable.
 		password:     password,
 		email:        email,
 	}
@@ -85,9 +78,8 @@ func (a *SMTPAdapter) SendEmail(toEmail string, entries *miniflux.EntryResultSet
 		"Subject: " + a.subject() + "\r\n" +
 		"Content-Type: " + string(a.content_type) + "; charset=UTF-8" +
 		"\r\n" + body)
-	address := fmt.Sprintf("%s:%d", a.server, a.port)
 
-	return smtp.SendMail(address, a.auth(), a.email, []string{toEmail}, msg)
+	return smtp.SendMail(a.server+":"+string(a.port), a.auth(), a.email, []string{toEmail}, msg)
 }
 
 func (a *SMTPAdapter) subject() string {
