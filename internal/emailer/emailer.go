@@ -9,7 +9,7 @@ import (
 	miniflux "miniflux.app/client"
 )
 
-type AdapterInteface interface {
+type EmailerInteface interface {
 	Send(string, *miniflux.EntryResultSet) error
 	GetMessage(string, *miniflux.EntryResultSet) string
 	GetAdapter() *SMTPAdapter
@@ -35,7 +35,7 @@ type SMTPAdapter struct {
 	Password string
 }
 
-func NewEmailer(server string, port int, username string, password string) AdapterInteface {
+func NewEmailer(server string, port int, username string, password string) EmailerInteface {
 	return &Emailer{
 		ContentType: TEXT,
 		Adapter: SMTPAdapter{
@@ -72,35 +72,31 @@ func (e *Emailer) Send(toEmail string, entries *miniflux.EntryResultSet) error {
 func (e *Emailer) GetMessage(toEmail string, entries *miniflux.EntryResultSet) string {
 	a := e.GetAdapter()
 
+	var body bytes.Buffer
+
+	switch e.ContentType {
+	case HTML:
+		for _, entry := range entries.Entries {
+			body.WriteString(fmt.Sprintf("<h2><a href=\"%s\">%s</a></h2><br/>", entry.URL, entry.Title))
+			body.WriteString(fmt.Sprintf("<div>%s</div>", entry.Content))
+			body.WriteString("<hr>")
+		}
+	case TEXT:
+		for _, entry := range entries.Entries {
+			body.WriteString(fmt.Sprintf("%s\n %s \n", entry.Title, entry.URL))
+			body.WriteString("---\n")
+		}
+	}
+
 	message := fmt.Sprintf("From: %s\r\n", a.Username)
 	message += fmt.Sprintf("To: %s\r\n", []string{toEmail})
 	message += fmt.Sprintf("Subject: %s\r\n", e.GetSubject())
-	message += fmt.Sprintf("Content-Type: %s; charset=UTF-8\r\n", string(e.ContentType))
-	message += fmt.Sprintf("\r\n%s\r\n", e.GetBody(entries))
+	message += fmt.Sprintf("Content-Type: %s; charset=UTF-8\r\n", e.ContentType)
+	message += fmt.Sprintf("\r\n%s\r\n", body.String())
 
 	return message
 }
 
 func (e *Emailer) GetSubject() string {
 	return fmt.Sprintf("📰 RSS Updates - %s", time.Now().Format("2006-01-02"))
-}
-
-func (e *Emailer) GetBody(entries *miniflux.EntryResultSet) string {
-	var buffer bytes.Buffer
-
-	switch e.ContentType {
-	case HTML:
-		for _, entry := range entries.Entries {
-			buffer.WriteString(fmt.Sprintf("<h2><a href=\"%s\">%s</a></h2><br/>", entry.URL, entry.Title))
-			buffer.WriteString(fmt.Sprintf("<div>%s</div>", entry.Content))
-			buffer.WriteString("<hr>")
-		}
-	case TEXT:
-		for _, entry := range entries.Entries {
-			buffer.WriteString(fmt.Sprintf("%s\n %s \n", entry.Title, entry.URL))
-			buffer.WriteString("---\n")
-		}
-	}
-
-	return buffer.String()
 }
