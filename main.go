@@ -19,7 +19,7 @@ func main() {
 	entries, err := client.GetUnreadEntries(category_name)
 
 	if err != nil {
-		log.Fatalf("failed to fetch RSS updates: %v", err)
+		log.Printf("failed to fetch RSS updates: %v", err)
 		return
 	}
 
