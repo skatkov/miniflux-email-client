@@ -10,48 +10,48 @@ import (
 )
 
 var (
-	receiverEmail  = os.Getenv("RECEIVER_EMAIL")
-	category_name  = os.Getenv("CATEGORY")
-	miniflux_url   = os.Getenv("MINIFLUX_URL")
-	miniflux_token = os.Getenv("MINIFLUX_TOKEN")
+	sendTo        = os.Getenv("SEND_TO")
+	categoryName  = os.Getenv("CATEGORY")
+	minifluxUrl   = os.Getenv("MINIFLUX_URL")
+	minifluxToken = os.Getenv("MINIFLUX_TOKEN")
 
-	smtp_server   = os.Getenv("SMTP_SERVER")
-	smtp_username = os.Getenv("SMTP_USERNAME")
-	smtp_password = os.Getenv("SMTP_PASSWORD")
-	smtp_port     int
-	err           error
+	smtpServer   = os.Getenv("SMTP_SERVER")
+	smtpUsername = os.Getenv("SMTP_USERNAME")
+	smtpPassword = os.Getenv("SMTP_PASSWORD")
+	smtpPort     int
+	err          error
 )
 
 func main() {
 	portStr := os.Getenv("SMTP_PORT")
 
 	if portStr == "" {
-		smtp_port = 587
+		smtpPort = 587
 	} else {
-		smtp_port, err = strconv.Atoi(portStr)
+		smtpPort, err = strconv.Atoi(portStr)
 
 		if err != nil {
 			log.Fatalf("failed to parse port: %v", err)
 		}
 
 	}
-	mailer := emailer.NewEmailer(smtp_server, smtp_port, smtp_username, smtp_password)
-	client := miniflux.NewClient(miniflux_url, miniflux_token)
-	err = client.SetCategory(category_name)
+	mailer := emailer.NewEmailer(smtpServer, smtpPort, smtpUsername, smtpPassword)
+	client := miniflux.NewClient(minifluxUrl, minifluxToken)
+	err = client.SetCategory(categoryName)
 
 	if err != nil {
 		log.Fatalf("failed to set category: %v", err)
 	}
 
-	entries, err := client.GetUnreadEntries(category_name)
+	entries, err := client.GetUnreadEntries(categoryName)
 
 	if err != nil {
 		log.Printf("failed to fetch RSS updates: %v", err)
 		return
 	}
 
-	log.Printf("sending email to: %v", receiverEmail)
-	err = mailer.Send(receiverEmail, entries)
+	log.Printf("sending email to: %v", sendTo)
+	err = mailer.Send(sendTo, entries)
 
 	if err != nil {
 		log.Fatalf("failed to send, due to an error: %v", err)
