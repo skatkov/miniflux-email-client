@@ -28,7 +28,7 @@ const (
 type SMTPAdapter struct {
 	content_type MimeType
 	server       string
-	port         uint16
+	port         string // TODO: "uint16" is better here.
 	email        string
 	password     string
 }
@@ -59,7 +59,7 @@ func NewEmailer(content_type MimeType) AdapterInteface {
 	return &SMTPAdapter{
 		content_type: content_type,
 		server:       server,
-		port:         587, //TODO: should be possible to configure through ENV variable.
+		port:         "587", //TODO: should be possible to configure through ENV variable.
 		password:     password,
 		email:        email,
 	}
@@ -79,7 +79,7 @@ func (a *SMTPAdapter) SendEmail(toEmail string, entries *miniflux.EntryResultSet
 		"Content-Type: " + string(a.content_type) + "; charset=UTF-8" +
 		"\r\n" + body)
 
-	return smtp.SendMail(a.server+":"+string(a.port), a.auth(), a.email, []string{toEmail}, msg)
+	return smtp.SendMail(a.server+":"+a.port, a.auth(), a.email, []string{toEmail}, msg)
 }
 
 func (a *SMTPAdapter) subject() string {

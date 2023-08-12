@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"os"
 
 	miniflux "github.com/skatkov/miniflux-email-client/internal/client"
@@ -19,21 +19,21 @@ func main() {
 	entries, err := client.GetUnreadEntries(category_name)
 
 	if err != nil {
-		fmt.Println("failed to fetch RSS updates: " + err.Error())
+		log.Fatalf("failed to fetch RSS updates: %v", err)
 		return
 	}
 
-	fmt.Println("sending email to: %s", receiverEmail)
+	log.Printf("sending email to: %v", receiverEmail)
 	err = mailer.SendEmail(receiverEmail, entries)
 
 	if err != nil {
-		fmt.Println("failed to send, due to an error: " + err.Error())
+		log.Fatalf("failed to send, due to an error: %v", err)
 		return
 	}
 
 	err = client.MarkAsRead()
 	if err != nil {
-		fmt.Println("failed to mark RSS updates as read, due to an error: " + err.Error())
+		log.Fatalf("failed to mark RSS updates as read, due to an error: %v", err)
 	}
 
 }
