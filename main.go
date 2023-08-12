@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"strconv"
 
 	miniflux "github.com/skatkov/miniflux-email-client/internal/client"
 	"github.com/skatkov/miniflux-email-client/internal/emailer"
@@ -11,11 +12,29 @@ import (
 var (
 	receiverEmail = os.Getenv("RECEIVER_EMAIL")
 	category_name = os.Getenv("CATEGORY")
+	smtp_server   = os.Getenv("SMTP_SERVER")
+	smtp_username = os.Getenv("SMTP_USERNAME")
+	smtp_password = os.Getenv("SMTP_PASSWORD")
+	smtp_port     int
+	err           error
 )
 
 func main() {
+	portStr := os.Getenv("SMTP_PORT")
+
+	if portStr == "" {
+		smtp_port = 587
+	} else {
+		smtp_port, err = strconv.Atoi(portStr)
+
+		if err != nil {
+			log.Fatalf("failed to parse port: %v", err)
+		}
+
+	}
+
 	client := miniflux.NewClient()
-	mailer := emailer.NewEmailer(emailer.TEXT)
+	mailer := emailer.NewEmailer(smtp_server, smtp_port, smtp_username, smtp_password)
 	entries, err := client.GetUnreadEntries(category_name)
 
 	if err != nil {
@@ -24,7 +43,7 @@ func main() {
 	}
 
 	log.Printf("sending email to: %v", receiverEmail)
-	err = mailer.SendEmail(receiverEmail, entries)
+	err = mailer.SendEmail(receiverEmail, entries, emailer.TEXT)
 
 	if err != nil {
 		log.Fatalf("failed to send, due to an error: %v", err)
