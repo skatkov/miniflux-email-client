@@ -7,18 +7,18 @@ import (
 	miniflux "miniflux.app/client"
 )
 
-type minifluxClient struct {
+type Client struct {
 	miniflux    *miniflux.Client
 	category_id int64
 }
 
-func NewClient() *minifluxClient {
-	return &minifluxClient{
+func NewClient() *Client {
+	return &Client{
 		miniflux: miniflux.New(os.Getenv("MINIFLUX_URL"), os.Getenv("MINIFLUX_TOKEN")),
 	}
 }
 
-func (c *minifluxClient) GetUnreadEntries(category_name string) (*miniflux.EntryResultSet, error) {
+func (c *Client) GetUnreadEntries(category_name string) (*miniflux.EntryResultSet, error) {
 	//TODO: we should support cases when category_name is not set.
 	categories, err := c.miniflux.Categories()
 	if err != nil {
@@ -43,6 +43,6 @@ func (c *minifluxClient) GetUnreadEntries(category_name string) (*miniflux.Entry
 	return entries, nil
 }
 
-func (c *minifluxClient) MarkAsRead() error {
+func (c *Client) MarkAsRead() error {
 	return c.miniflux.MarkCategoryAsRead(c.category_id)
 }
