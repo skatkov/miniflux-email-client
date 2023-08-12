@@ -1,7 +1,11 @@
 # Miniflux Email Client
-Sends RSS updates from miniflux to your email. 
+Sends RSS updates from miniflux to personal email. 
 
-This client is a minimal self-hosted version of mailbrew, briefcake and tacodigest. It doesn't require any server or email provider, but relies on free github action and a gmail account.
+There are services that allow to send RSS updates through email, like mailbrew, briefcake or tacodigest. This is a miniflux-client that does something similar, but doesn't need to be hosted. 
+
+This project uses github actions and any smtp account available. In most cases, these things could be used free of charge.
+
+Just fork away and get one for you're personal enjoyment.
 
 ## Prerequisites
 - A Miniflux instance with an account
@@ -18,7 +22,7 @@ This client is a minimal self-hosted version of mailbrew, briefcake and tacodige
 Every 3 months github will ask if you want to keep running daily actions. Click "yes", if you want to continue receiving updates.
 
 ## Maintenance
-It initially started as a proof-of-concept project. Since concept works, i'm trying to get this miniflux client to some "done" state.
+It initially started as a proof-of-concept project. But it kinda works, I'm trying to get this miniflux client to some "done" state.
 
 Any contributions or ideas are welcome.
 
