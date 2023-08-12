@@ -10,8 +10,11 @@ import (
 )
 
 var (
-	receiverEmail = os.Getenv("RECEIVER_EMAIL")
-	category_name = os.Getenv("CATEGORY")
+	receiverEmail  = os.Getenv("RECEIVER_EMAIL")
+	category_name  = os.Getenv("CATEGORY")
+	miniflux_url   = os.Getenv("MINIFLUX_URL")
+	miniflux_token = os.Getenv("MINIFLUX_TOKEN")
+
 	smtp_server   = os.Getenv("SMTP_SERVER")
 	smtp_username = os.Getenv("SMTP_USERNAME")
 	smtp_password = os.Getenv("SMTP_PASSWORD")
@@ -32,9 +35,14 @@ func main() {
 		}
 
 	}
-
-	client := miniflux.NewClient()
 	mailer := emailer.NewEmailer(smtp_server, smtp_port, smtp_username, smtp_password)
+	client := miniflux.NewClient(miniflux_url, miniflux_token)
+	err = client.SetCategory(category_name)
+
+	if err != nil {
+		log.Fatalf("failed to set category: %v", err)
+	}
+
 	entries, err := client.GetUnreadEntries(category_name)
 
 	if err != nil {
