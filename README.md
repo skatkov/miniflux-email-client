@@ -17,13 +17,14 @@ This client is a minimal self-hosted version of mailbrew, briefcake and tacodige
 ## Github Action
 Every 3 months github will ask if you want to keep running daily actions. Click "yes", if you want to continue receiving updates.
 
-## Mai
-It initially started as a proof-of-concept project, with very badly structured code. Since concept works, in my free time on working on improvements.
+## Maintenance
+It initially started as a proof-of-concept project. Since concept works, i'm trying to get this miniflux client to some "done" state.
 
 Any contributions or ideas are welcome.
 
 Current plan includes:
 - [x] Generalize email configuration, so not only GMAIL could be used.
 - [ ] Improve email design - add table of contents, improve template
-- [x] simplify configuration, now things are a bit all over the place
+- [x] Introduce PLAIN TEXT emails
+- [ ] simplify configuration for others, now things are a bit all over the place
 - [ ] make project easier to maintain (simplify, write tests and etc)
