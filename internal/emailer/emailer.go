@@ -43,21 +43,14 @@ func NewEmailer(content_type MimeType) AdapterInteface {
 	if len(content_type) > 0 {
 		content_type = TEXT
 	}
-	// TODO: we should dperecate usage of GMAIL_* env variables.
-	if password = os.Getenv("SMTP_PASSWORD"); password == "" {
-		password = os.Getenv("GMAIL_PASSWORD")
-	}
-
-	if email = os.Getenv("SMTP_EMAIL"); email == "" {
-		email = os.Getenv("GMAIL_EMAIL")
-	}
 
 	return &SMTPAdapter{
 		content_type: content_type,
 		server:       "smtp.gmail.com",
 		port:         "587", //TODO: should be possible to configure through ENV variable.
-		password:     password,
-		email:        email,
+		// TODO: stop using GMAIL_* env variables, make sure that these variables are set as well.
+		password: os.Getenv("GMAIL_PASSWORD"),
+		email:    os.Getenv("GMAIL_EMAIL"),
 	}
 }
 
