@@ -52,13 +52,9 @@ func NewEmailer(content_type MimeType) AdapterInteface {
 		email = os.Getenv("GMAIL_EMAIL")
 	}
 
-	if server := os.Getenv("SMTP_SERVER"); server == "" {
-		server = "smtp.gmail.com"
-	}
-
 	return &SMTPAdapter{
 		content_type: content_type,
-		server:       server,
+		server:       "smtp.gmail.com",
 		port:         "587", //TODO: should be possible to configure through ENV variable.
 		password:     password,
 		email:        email,
@@ -79,7 +75,7 @@ func (a *SMTPAdapter) SendEmail(toEmail string, entries *miniflux.EntryResultSet
 		"Content-Type: " + string(a.content_type) + "; charset=UTF-8" +
 		"\r\n" + body)
 
-	return smtp.SendMail(a.server+":"+a.port, a.auth(), a.email, []string{toEmail}, msg)
+	return smtp.SendMail("smtp.gmail.com:"+a.port, a.auth(), a.email, []string{toEmail}, msg)
 }
 
 func (a *SMTPAdapter) subject() string {
