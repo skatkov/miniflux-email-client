@@ -1,4 +1,4 @@
-package miniflux_email_client
+package client
 
 import (
 	"errors"
