@@ -28,34 +28,32 @@ const (
 type SMTPAdapter struct {
 	content_type MimeType
 	server       string
-	port         string // TODO: "uint16" is better here.
-	email        string
+	port         string // TODO: "uint16" is better suited here.
+	username     string
 	password     string
 }
-
-var (
-	password string
-	email    string
-	server   string
-)
 
 func NewEmailer(content_type MimeType) AdapterInteface {
 	if len(content_type) > 0 {
 		content_type = TEXT
 	}
 
+	var port string
+	if port := os.Getenv("SMTP_PORT"); len(port) > 0 {
+		port = "587"
+	}
+
 	return &SMTPAdapter{
 		content_type: content_type,
-		server:       "smtp.gmail.com",
-		port:         "587", //TODO: should be possible to configure through ENV variable.
-		// TODO: stop using GMAIL_* env variables, make sure that these variables are set as well.
-		password: os.Getenv("GMAIL_PASSWORD"),
-		email:    os.Getenv("GMAIL_EMAIL"),
+		server:       os.Getenv("SMTP_SERVER"),
+		port:         port,
+		password:     os.Getenv("SMTP_PASSWORD"),
+		username:     os.Getenv("SMTP_USERNAME"),
 	}
 }
 
 func (a *SMTPAdapter) auth() smtp.Auth {
-	return smtp.PlainAuth("", a.email, a.password, a.server)
+	return smtp.PlainAuth("", a.username, a.password, a.server)
 }
 
 func (a *SMTPAdapter) SendEmail(toEmail string, entries *miniflux.EntryResultSet) error {
@@ -68,7 +66,7 @@ func (a *SMTPAdapter) SendEmail(toEmail string, entries *miniflux.EntryResultSet
 		"Content-Type: " + string(a.content_type) + "; charset=UTF-8" +
 		"\r\n" + body)
 
-	return smtp.SendMail("smtp.gmail.com:"+a.port, a.auth(), a.email, []string{toEmail}, msg)
+	return smtp.SendMail(a.server+":"+a.port, a.auth(), a.username, []string{toEmail}, msg)
 }
 
 func (a *SMTPAdapter) subject() string {
@@ -87,9 +85,9 @@ func (a *SMTPAdapter) formatBody(entries *miniflux.EntryResultSet) (string, erro
 		}
 	case TEXT:
 		for _, entry := range entries.Entries {
-			buffer.WriteString(fmt.Sprintf("%s - %s", entry.URL, entry.Title))
-			buffer.WriteString(fmt.Sprintf("--------------\n%s\n--------------", entry.Content))
-			buffer.WriteString("\n")
+
+			buffer.WriteString(fmt.Sprintf("%s\n %s \n", entry.Title, entry.URL))
+			buffer.WriteString("---\n")
 		}
 	default:
 		return "", errors.New("invalid content type - " + string(a.content_type))
