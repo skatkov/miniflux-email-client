@@ -43,7 +43,7 @@ func main() {
 	}
 
 	log.Printf("sending email to: %v", receiverEmail)
-	err = mailer.SendEmail(receiverEmail, entries, emailer.TEXT)
+	err = mailer.Send(receiverEmail, entries)
 
 	if err != nil {
 		log.Fatalf("failed to send, due to an error: %v", err)
