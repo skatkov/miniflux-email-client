@@ -61,12 +61,14 @@ func (a *SMTPAdapter) SendEmail(toEmail string, entries *miniflux.EntryResultSet
 	if err != nil {
 		return err
 	}
-	msg := []byte("To: <" + toEmail + ">\r\n" +
-		"Subject: " + a.subject() + "\r\n" +
-		"Content-Type: " + string(a.content_type) + "; charset=UTF-8" +
-		"\r\n" + body)
 
-	return smtp.SendMail(a.server+":"+a.port, a.auth(), a.username, []string{toEmail}, msg)
+	message := fmt.Sprintf("From: %s\r\n", a.username)
+	message += fmt.Sprintf("To: %s\r\n", []string{toEmail})
+	message += fmt.Sprintf("Subject: %s\r\n", a.subject())
+	message += fmt.Sprintf("Content-Type: %s; charset=UTF-8\r\n", string(a.content_type))
+	message += fmt.Sprintf("\r\n%s\r\n", body)
+
+	return smtp.SendMail(a.server+":"+a.port, a.auth(), a.username, []string{toEmail}, []byte(message))
 }
 
 func (a *SMTPAdapter) subject() string {
