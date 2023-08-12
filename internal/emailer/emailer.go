@@ -21,8 +21,8 @@ type AdapterInteface interface {
 type MimeType string
 
 const (
-	HTML  MimeType = "text/html"
-	Plain MimeType = "text/plain"
+	HTML MimeType = "text/html"
+	TEXT MimeType = "text/plain"
 )
 
 type SMTPAdapter struct {
@@ -41,7 +41,7 @@ var (
 
 func NewEmailer(content_type MimeType) AdapterInteface {
 	if len(content_type) > 0 {
-		content_type = Plain
+		content_type = TEXT
 	}
 	// TODO: we should dperecate usage of GMAIL_* env variables.
 	if password = os.Getenv("SMTP_PASSWORD"); password == "" {
@@ -96,14 +96,14 @@ func (a *SMTPAdapter) formatBody(entries *miniflux.EntryResultSet) (string, erro
 			buffer.WriteString(fmt.Sprintf("<div>%s</div>", entry.Content))
 			buffer.WriteString("<hr>")
 		}
-	case Plain:
+	case TEXT:
 		for _, entry := range entries.Entries {
 			buffer.WriteString(fmt.Sprintf("%s - %s", entry.URL, entry.Title))
 			buffer.WriteString(fmt.Sprintf("--------------\n%s\n--------------", entry.Content))
 			buffer.WriteString("\n")
 		}
 	default:
-		return "", errors.New("invalid content type")
+		return "", errors.New("invalid content type - " + string(a.content_type))
 	}
 
 	return buffer.String(), nil
