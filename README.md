@@ -12,8 +12,7 @@ This client is a minimal self-hosted version of mailbrew, briefcake and tacodige
 2. Retrieve miniflux API token
 3. Configure gmail smtp based on a [following guide](https://community.cloudflare.com/t/solved-how-to-use-gmail-smtp-to-send-from-an-email-address-which-uses-cloudflare-email-routing/382769/2)
 4. Modify `.github/workflows/daily_run.yml` file
-5. Add github/action secrets
-
+5. Add github/action secrets (SMTP_SERVER, SMTP_USERNAME and SMTP_PASSWORD are required)
 
 ## Github Action
 Every 3 months github will ask if you want to keep running daily actions. Click "yes", if you want to continue receiving updates.

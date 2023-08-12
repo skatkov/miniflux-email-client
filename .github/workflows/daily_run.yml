@@ -21,8 +21,8 @@ jobs:
       env:
         MINIFLUX_URL: ${{ secrets.MINIFLUX_URL }}
         MINIFLUX_TOKEN: ${{ secrets.MINIFLUX_TOKEN }}
-        GMAIL_EMAIL: ${{ secrets.GMAIL_EMAIL }}
-        GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+        SMTP_USERNAME: ${{ secrets.SMTP_EMAIL }}
+        SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
         CATEGORY: daily
         RECEIVER_EMAIL: contact@skatkov.com
         CGO_ENABLED: 0
