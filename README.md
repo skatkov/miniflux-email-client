@@ -5,7 +5,7 @@ This client is a minimal self-hosted version of mailbrew, briefcake and tacodige
 
 ## Prerequisites
 - A Miniflux instance with an account
-- A Gmail account, preferably not you're main account.
+- SMTP account (I use gmail, but make sure it's not you're main gmail account if you do)
 
 ## Setup
 1. Fork this repo
