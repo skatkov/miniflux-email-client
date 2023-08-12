@@ -24,7 +24,7 @@ jobs:
         SMTP_USERNAME: ${{ secrets.SMTP_EMAIL }}
         SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
         CATEGORY: daily
-        RECEIVER_EMAIL: contact@skatkov.com
+        SEND_TO: contact@skatkov.com
         CGO_ENABLED: 0
       run: |
         go run main.go

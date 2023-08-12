@@ -8,7 +8,7 @@ export SMTP_USERNAME="your-gmail-email"
 export SMTP_PASSWORD="your-password"
 export SMTP_HOST="smtp.gmail.com"
 export CATEGORY="daily"
-export RECEIVER_EMAIL="contact@skatkov.com"
+export SEND_TO="contact@skatkov.com"
 
 # Build the application
 go build
