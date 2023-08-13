@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 	"os"
-	"strconv"
 
+	"github.com/caarlos0/env/v9"
 	miniflux "github.com/skatkov/miniflux-email-client/internal/client"
 	"github.com/skatkov/miniflux-email-client/internal/emailer"
 )
@@ -15,27 +15,16 @@ var (
 	minifluxUrl   = os.Getenv("MINIFLUX_URL")
 	minifluxToken = os.Getenv("MINIFLUX_TOKEN")
 
-	smtpServer   = os.Getenv("SMTP_SERVER")
-	smtpUsername = os.Getenv("SMTP_USERNAME")
-	smtpPassword = os.Getenv("SMTP_PASSWORD")
-	smtpPort     int
-	err          error
+	err error
 )
 
 func main() {
-	portStr := os.Getenv("SMTP_PORT")
-
-	if portStr == "" {
-		smtpPort = 587
-	} else {
-		smtpPort, err = strconv.Atoi(portStr)
-
-		if err != nil {
-			log.Fatalf("failed to parse port: %v", err)
-		}
-
+	smtpConfig := emailer.SMTPConfig{}
+	if err = env.Parse(&smtpConfig); err != nil {
+		log.Fatalf("failed parsing ENV variables: %+v\n", err)
 	}
-	mailer := emailer.NewEmailer(smtpServer, smtpPort, smtpUsername, smtpPassword)
+
+	mailer := emailer.NewEmailer(smtpConfig)
 	client := miniflux.NewClient(minifluxUrl, minifluxToken)
 	err = client.SetCategory(categoryName)
 
@@ -43,7 +32,7 @@ func main() {
 		log.Fatalf("failed to set category: %v", err)
 	}
 
-	entries, err := client.GetUnreadEntries(categoryName)
+	entries, err := client.GetUnreadEntries()
 
 	if err != nil {
 		log.Printf("failed to fetch RSS updates: %v", err)

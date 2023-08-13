@@ -22,32 +22,16 @@ type Emailer struct {
 }
 
 type SMTPConfig struct {
-	Server   string
-	Port     int
-	Username string
-	Password string
+	Server   string `env:"SMTP_SERVER" envDefault:"smtp.gmail.com"`
+	Port     int    `env:"SMTP_PORT" envDefault:"587"`
+	Username string `env:"SMTP_USERNAME,required"`
+	Password string `env:"SMTP_PASSWORD,required"`
 }
 
-func NewEmailer(server string, port int, username string, password string) *Emailer {
+func NewEmailer(config SMTPConfig) *Emailer {
 	return &Emailer{
-		ContentType: TEXT,
-		SMTP: SMTPConfig{
-			Server:   server,
-			Port:     port,
-			Password: password,
-			Username: username,
-		},
-	}
-
-}
-
-func (e *Emailer) SetContentType(contentType MimeType) error {
-	switch contentType {
-	case HTML, TEXT:
-		e.ContentType = contentType
-		return nil
-	default:
-		return fmt.Errorf("invalid content type: %s", contentType)
+		ContentType: TEXT, //This could be HTML as well.
+		SMTP:        config,
 	}
 }
 
