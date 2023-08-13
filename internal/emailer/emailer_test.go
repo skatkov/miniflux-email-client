@@ -11,10 +11,10 @@ import (
 func TestEmailerGetAdapter(t *testing.T) {
 	emailer := NewEmailer("smtp.gmail.com", 587, "lunaticman@gmail.com", "testpass")
 
-	assert.Equal(t, "smtp.gmail.com", emailer.GetAdapter().Server)
-	assert.Equal(t, 587, emailer.GetAdapter().Port)
-	assert.Equal(t, "lunaticman@gmail.com", emailer.GetAdapter().Username)
-	assert.Equal(t, "testpass", emailer.GetAdapter().Password)
+	assert.Equal(t, "smtp.gmail.com", emailer.SMTP.Server)
+	assert.Equal(t, 587, emailer.SMTP.Port)
+	assert.Equal(t, "lunaticman@gmail.com", emailer.SMTP.Username)
+	assert.Equal(t, "testpass", emailer.SMTP.Password)
 }
 
 // entries mock
@@ -50,5 +50,5 @@ var ers = miniflux.EntryResultSet{
 func TestEmilerGetMessage(t *testing.T) {
 	emailer := NewEmailer("smtp.gmail.com", 587, "test@gmail.com", "testpass")
 
-	assert.Equal(t, "test", emailer.GetMessage("newsletter@test.com", &ers))
+	assert.Equal(t, "test", emailer.getMessage("newsletter@test.com", &ers))
 }
