@@ -40,7 +40,7 @@ func (c *Client) SetCategory(category_name string) error {
 // TODO: We don't support retrieving unread entries without actegory_id, in reality it's rarely a good idea.
 func (c *Client) GetUnreadEntries() (*miniflux.EntryResultSet, error) {
 	if c.category_id == 0 {
-		//TODO: we should support cases when category_name is not set.
+		// TODO: we should support cases when category_name is not set.
 		return nil, errors.New("category_name is not set")
 	}
 

@@ -30,7 +30,7 @@ type SMTPConfig struct {
 
 func NewEmailer(config SMTPConfig) *Emailer {
 	return &Emailer{
-		ContentType: TEXT, //This could be HTML as well.
+		ContentType: TEXT, // This could be HTML as well.
 		SMTP:        config,
 	}
 }
