@@ -9,13 +9,6 @@ import (
 	miniflux "miniflux.app/client"
 )
 
-type EmailerInteface interface {
-	Send(string, *miniflux.EntryResultSet) error
-	GetMessage(string, *miniflux.EntryResultSet) string
-	GetAdapter() *SMTPAdapter
-	SetContentType(MimeType) error
-}
-
 type MimeType string
 
 const (
@@ -25,53 +18,31 @@ const (
 
 type Emailer struct {
 	ContentType MimeType
-	Adapter     SMTPAdapter
+	SMTP        SMTPConfig
 }
 
-type SMTPAdapter struct {
-	Server   string
-	Port     int
-	Username string
-	Password string
+type SMTPConfig struct {
+	Server   string `env:"SMTP_SERVER" envDefault:"smtp.gmail.com"`
+	Port     int    `env:"SMTP_PORT" envDefault:"587"`
+	Username string `env:"SMTP_USERNAME,required"`
+	Password string `env:"SMTP_PASSWORD,required"`
 }
 
-func NewEmailer(server string, port int, username string, password string) EmailerInteface {
+func NewEmailer(config SMTPConfig) *Emailer {
 	return &Emailer{
-		ContentType: TEXT,
-		Adapter: SMTPAdapter{
-			Server:   server,
-			Port:     port,
-			Password: password,
-			Username: username,
-		},
-	}
-
-}
-
-func (e *Emailer) GetAdapter() *SMTPAdapter {
-	return &e.Adapter
-}
-
-func (e *Emailer) SetContentType(contentType MimeType) error {
-	switch contentType {
-	case HTML, TEXT:
-		e.ContentType = contentType
-		return nil
-	default:
-		return fmt.Errorf("invalid content type: %s", contentType)
+		ContentType: TEXT, // This could be HTML as well.
+		SMTP:        config,
 	}
 }
 
 func (e *Emailer) Send(toEmail string, entries *miniflux.EntryResultSet) error {
-	a := e.GetAdapter()
+	a := e.SMTP
 	auth := smtp.PlainAuth("", a.Username, a.Password, a.Server)
 
-	return smtp.SendMail(a.Server+":"+fmt.Sprint(a.Port), auth, a.Username, []string{toEmail}, []byte(e.GetMessage(toEmail, entries)))
+	return smtp.SendMail(a.Server+":"+fmt.Sprint(a.Port), auth, a.Username, []string{toEmail}, []byte(e.getMessage(toEmail, entries)))
 }
 
-func (e *Emailer) GetMessage(toEmail string, entries *miniflux.EntryResultSet) string {
-	a := e.GetAdapter()
-
+func (e *Emailer) getMessage(toEmail string, entries *miniflux.EntryResultSet) string {
 	var body bytes.Buffer
 
 	switch e.ContentType {
@@ -88,15 +59,10 @@ func (e *Emailer) GetMessage(toEmail string, entries *miniflux.EntryResultSet) s
 		}
 	}
 
-	message := fmt.Sprintf("From: %s\r\n", a.Username)
-	message += fmt.Sprintf("To: %s\r\n", []string{toEmail})
-	message += fmt.Sprintf("Subject: %s\r\n", e.GetSubject())
+	message := fmt.Sprintf("To: %s\r\n", []string{toEmail})
+	message += fmt.Sprintf("Subject: %s\r\n", fmt.Sprintf("📰 RSS Updates - %s", time.Now().Format("2006-01-02")))
 	message += fmt.Sprintf("Content-Type: %s; charset=UTF-8\r\n", e.ContentType)
 	message += fmt.Sprintf("\r\n%s\r\n", body.String())
 
 	return message
-}
-
-func (e *Emailer) GetSubject() string {
-	return fmt.Sprintf("📰 RSS Updates - %s", time.Now().Format("2006-01-02"))
 }
