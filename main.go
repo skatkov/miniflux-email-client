@@ -10,10 +10,7 @@ import (
 )
 
 var (
-	sendTo        = os.Getenv("SEND_TO")
-	categoryName  = os.Getenv("CATEGORY")
-	minifluxUrl   = os.Getenv("MINIFLUX_URL")
-	minifluxToken = os.Getenv("MINIFLUX_TOKEN")
+	sendTo = os.Getenv("SEND_TO")
 
 	err error
 )
@@ -21,12 +18,17 @@ var (
 func main() {
 	smtpConfig := emailer.SMTPConfig{}
 	if err = env.Parse(&smtpConfig); err != nil {
-		log.Fatalf("failed parsing ENV variables: %+v\n", err)
+		log.Fatalf("failed parsing ENV variables for SMTP: %+v\n", err)
 	}
 
 	mailer := emailer.NewEmailer(smtpConfig)
-	client := miniflux.NewClient(minifluxUrl, minifluxToken)
-	err = client.SetCategory(categoryName)
+
+	minifluxConfig := miniflux.MinifluxConfig{}
+	if err = env.Parse(&smtpConfig); err != nil {
+		log.Fatalf("failed parsing ENV variables for miniflux: %+v\n", err)
+	}
+	client := miniflux.NewClient(minifluxConfig)
+	err = client.SetCategoryID(minifluxConfig.CategoryName)
 
 	if err != nil {
 		log.Fatalf("failed to set category: %v", err)
