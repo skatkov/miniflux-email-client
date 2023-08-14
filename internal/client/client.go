@@ -2,6 +2,7 @@ package client
 
 import (
 	"errors"
+	"fmt"
 
 	miniflux "miniflux.app/client"
 )
@@ -12,12 +13,13 @@ type Client struct {
 }
 
 type MinifluxConfig struct {
-	ApiUrl       string `env:"MINIFLUX_URL" envDefault:"https://reader.miniflux.app"`
+	ApiUrl       string `env:"MINIFLUX_URL" envDefault:"https://reader.miniflux.app/"`
 	Token        string `env:"MINIFLUX_TOKEN,required"`
 	CategoryName string `env:"CATEGORY,required"`
 }
 
 func NewClient(config MinifluxConfig) *Client {
+	fmt.Printf("Creating new client with config: %s", config)
 	return &Client{
 		miniflux: miniflux.New(config.ApiUrl, config.Token),
 	}
@@ -30,6 +32,7 @@ func NewClient(config MinifluxConfig) *Client {
 
 func (c *Client) SetCategoryID(categoryName string) error {
 	categories, err := c.miniflux.Categories()
+
 	if err != nil {
 		return errors.New("failed to find categories")
 	}

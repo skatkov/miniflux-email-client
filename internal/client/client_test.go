@@ -6,10 +6,17 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestClient(t *testing.T) {
-	c := NewClient("http://localhost:8080", "token_test")
+var (
+	config MinifluxConfig = MinifluxConfig{
+		ApiUrl:       "https://reader.miniflux.app/",
+		Token:        "test01",
+		CategoryName: "['daily']",
+	}
+)
 
-	err := c.SetCategory("test")
+func TestClient(t *testing.T) {
+	c := NewClient(config)
+	err := c.SetCategoryID(config.CategoryName)
 
 	assert.Error(t, err)
 }
