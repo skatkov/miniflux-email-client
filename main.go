@@ -24,7 +24,7 @@ func main() {
 	mailer := emailer.NewEmailer(smtpConfig)
 
 	minifluxConfig := miniflux.MinifluxConfig{}
-	if err = env.Parse(&smtpConfig); err != nil {
+	if err = env.Parse(&minifluxConfig); err != nil {
 		log.Fatalf("failed parsing ENV variables for miniflux: %+v\n", err)
 	}
 	client := miniflux.NewClient(minifluxConfig)
