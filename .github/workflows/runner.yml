@@ -25,6 +25,6 @@ jobs:
         SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
         SEND_TO: contact@skatkov.com
         CGO_ENABLED: 0
-        CATEGORY: ${{ env.CATEGORY }}
+        CATEGORY: ${{ secrets.CATEGORY }}
       run: |
         go run main.go
