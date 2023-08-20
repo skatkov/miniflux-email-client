@@ -19,12 +19,12 @@ jobs:
 
     - name: Check RSS updates and send them over email.
       env:
-        MINIFLUX_URL: ${{ env.MINIFLUX_URL }}
+        MINIFLUX_URL: "https://reader.miniflux.app/v1/"
         MINIFLUX_TOKEN: ${{ secrets.MINIFLUX_TOKEN }}
         SMTP_USERNAME: ${{ secrets.SMTP_EMAIL }}
         SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
         SEND_TO: contact@skatkov.com
         CGO_ENABLED: 0
-        CATEGORY: ${{ secrets.CATEGORY }}
+        CATEGORY: "['daily']"
       run: |
         go run main.go
