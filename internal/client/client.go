@@ -2,7 +2,7 @@ package client
 
 import (
 	"errors"
-	"fmt"
+	"log"
 
 	miniflux "miniflux.app/client"
 )
@@ -19,7 +19,7 @@ type MinifluxConfig struct {
 }
 
 func NewClient(config MinifluxConfig) *Client {
-	fmt.Printf("Creating new client with config: %s", config)
+	log.Printf("Creating new client with config: %s", config)
 	return &Client{
 		miniflux: miniflux.New(config.ApiUrl, config.Token),
 	}
