@@ -40,6 +40,7 @@ func (c *Client) SetCategoryID(categoryName string) error {
 	for _, category := range categories {
 		if category.Title == categoryName {
 			c.categoryId = category.ID
+			log.Printf("category_id set to: %v", c.categoryId)
 		}
 	}
 	return nil
