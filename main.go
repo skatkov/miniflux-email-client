@@ -28,6 +28,8 @@ func main() {
 		log.Fatalf("failed parsing ENV variables for miniflux: %+v\n", err)
 	}
 	client := miniflux.NewClient(minifluxConfig)
+
+	log.Printf("setting category to: %v", minifluxConfig.CategoryName)
 	err = client.SetCategoryID(minifluxConfig.CategoryName)
 
 	if err != nil {
