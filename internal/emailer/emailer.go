@@ -28,9 +28,13 @@ type SMTPConfig struct {
 	Password string `env:"SMTP_PASSWORD,required"`
 }
 
-func NewEmailer(config SMTPConfig) *Emailer {
+func NewEmailer(config SMTPConfig, contentType MimeType) *Emailer {
+	if contentType == "" {
+		contentType = TEXT
+	}
+
 	return &Emailer{
-		ContentType: TEXT, // This could be HTML as well.
+		ContentType: contentType,
 		SMTP:        config,
 	}
 }

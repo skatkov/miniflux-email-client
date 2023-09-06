@@ -16,7 +16,7 @@ var (
 )
 
 func TestEmailerGetAdapter(t *testing.T) {
-	emailer := NewEmailer(config)
+	emailer := NewEmailer(config, HTML)
 
 	assert.Equal(t, "smtp.gmail.com", emailer.SMTP.Server)
 	assert.Equal(t, 587, emailer.SMTP.Port)
