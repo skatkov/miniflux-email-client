@@ -22,13 +22,13 @@ Just fork away and get one for you're personal enjoyment.
 Every 3 months github will ask if you want to keep running daily actions. Click "yes", if you want to continue receiving updates.
 
 ## Maintenance
-It initially started as a proof-of-concept project. But it kinda works, I'm trying to get this miniflux client to some "done" state.
-
-Any contributions or ideas are welcome.
+I use this project myself daily, it's not feature complete, but it works stably. I'd encourage leaving your feedback and contributions.
 
 Current plan includes:
 - [x] Generalize email configuration, so not only GMAIL could be used.
 - [ ] Improve email design - add table of contents, improve template
 - [x] Introduce PLAIN TEXT emails
-- [ ] simplify configuration for others, now things are a bit all over the place
-- [ ] make project easier to maintain (simplify, write tests and etc)
+- [ ] Ability to provide multiple categories
+- [ ] Ability to not provide any categories at all
+- [ ] Ability to limit number of RSS updates sent out daily
+- [x] make project easier to maintain (simplify, write tests and etc)
