@@ -4,7 +4,7 @@ Miniflux Cliet to send feed updates over email.
 Fork it and use it!
 
 ## Background
-There are plenty of "RSS-over-email" services out there - mailbrew, briefcake or tacodigest as example. This project aims to rebuild essential features of those services, but using git + CI + SMTP. In most cases, these things could be used free of charge and no need to selfhost if you don't want to.
+There are plenty of "RSS-over-email" services out there - mailbrew, briefcake or tacodigest as example. This project aims to rebuild essential features of those services, but using git + CI + SMTP. In most cases, these things could be used free of charge and available with open source github/gitlab repo.
 
 ## Prerequisites
 - Github repo + CI support
