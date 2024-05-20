@@ -48,13 +48,18 @@ func (c *Client) SetCategoryID(categoryName string) error {
 
 // This returns unread entries, it requires currently that category_id has been set already with SetCategory method.
 // TODO: We don't support retrieving unread entries without actegory_id, in reality it's rarely a good idea.
-func (c *Client) GetUnreadEntries() (*miniflux.EntryResultSet, error) {
+func (c *Client) GetUnreadEntries(limit int) (*miniflux.EntryResultSet, error) {
 	if c.categoryId == 0 {
 		// TODO: we should support cases when category_name is not set.
 		return nil, errors.New("category_name is not set")
 	}
 
-	entries, err := c.miniflux.CategoryEntries(c.categoryId, &miniflux.Filter{Status: miniflux.EntryStatusUnread, CategoryID: c.categoryId})
+	entries, err := c.miniflux.CategoryEntries(c.categoryId, &miniflux.Filter{
+		Status:     miniflux.EntryStatusUnread,
+		CategoryID: c.categoryId,
+		Limit:      limit,
+	})
+
 	if err != nil {
 		return nil, err
 	}
@@ -67,6 +72,14 @@ func (c *Client) GetUnreadEntries() (*miniflux.EntryResultSet, error) {
 }
 
 // Marks entries as read, it requires currently that category_id has been set already with SetCategory method.
-func (c *Client) MarkAsRead() error {
+func (c *Client) MarkCategoryAsRead() error {
 	return c.miniflux.MarkCategoryAsRead(c.categoryId)
+}
+
+func (c *Client) MarkAsRead(entries *miniflux.EntryResultSet) error {
+	var entryIDs []int64
+	for _, entry := range entries.Entries {
+		entryIDs = append(entryIDs, entry.ID)
+	}
+	return c.miniflux.UpdateEntries(entryIDs, miniflux.EntryStatusRead)
 }

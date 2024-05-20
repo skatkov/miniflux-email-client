@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"strconv"
 
 	"github.com/caarlos0/env/v9"
 	miniflux "github.com/skatkov/miniflux-email-client/internal/client"
@@ -11,11 +12,12 @@ import (
 
 var (
 	sendTo = os.Getenv("SEND_TO")
-
-	err error
+	err    error
 )
 
 func main() {
+	limit, _ := strconv.Atoi(os.Getenv("LIMIT"))
+
 	smtpConfig := emailer.SMTPConfig{}
 	if err = env.Parse(&smtpConfig); err != nil {
 		log.Fatalf("failed parsing ENV variables for SMTP: %+v\n", err)
@@ -36,7 +38,7 @@ func main() {
 		log.Fatalf("failed to set category: %v", err)
 	}
 
-	entries, err := client.GetUnreadEntries()
+	entries, err := client.GetUnreadEntries(limit)
 
 	if err != nil {
 		log.Fatalf("failed to fetch RSS updates: %v", err)
@@ -51,9 +53,16 @@ func main() {
 		return
 	}
 
-	err = client.MarkAsRead()
-	if err != nil {
-		log.Fatalf("failed to mark RSS updates as read, due to an error: %v", err)
+	if limit == 0 {
+		err = client.MarkCategoryAsRead()
+		if err != nil {
+			log.Fatalf("failed to mark updates in category as read, due to an error: %v", err)
+		}
+	} else {
+		err = client.MarkAsRead(entries)
+		if err != nil {
+			log.Fatalf("failed to mark individual RSS updates as read, due to an error: %v", err)
+		}
 	}
 
 }
