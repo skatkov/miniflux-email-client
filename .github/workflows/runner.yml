@@ -23,7 +23,7 @@ jobs:
         MINIFLUX_TOKEN: ${{ secrets.MINIFLUX_TOKEN }}
         SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
         SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
-        SEND_TO: contact@skatkov.com
+        SEND_TO: ${{ secrets.TO_EMAIL }}
         CGO_ENABLED: 0
         CATEGORY: daily
       run: |
