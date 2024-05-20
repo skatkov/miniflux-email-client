@@ -1,7 +1,9 @@
 # Miniflux Email Client
-Miniflux Cliet to send feed updates over email.
+Miniflux Client to send feed updates over email.
 
-Fork it and use it!
+It's perfect "no-cost" solution based on github/smtp for people who always forget to check RSS readers for updates, but never miss emails.
+
+Just Fork it! (c)
 
 ## Background
 There are plenty of "RSS-over-email" services out there - mailbrew, briefcake or tacodigest as example. This project aims to rebuild essential features of those services, but using git + CI + SMTP. In most cases, these things could be used free of charge and available with open source github/gitlab repo.
