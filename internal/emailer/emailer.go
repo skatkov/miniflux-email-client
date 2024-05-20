@@ -64,8 +64,14 @@ func (e *Emailer) getMessage(toEmail string, entries *miniflux.EntryResultSet) s
 		}
 	}
 
+	entriesCount := len(entries.Entries)
+	updateTerm := "Updates"
+	if entriesCount == 1 {
+		updateTerm = "Update"
+	}
+
 	message := fmt.Sprintf("To: %s\r\n", []string{toEmail})
-	message += fmt.Sprintf("Subject: %s\r\n", fmt.Sprintf("📰 %s Updates - %s", strconv.Itoa(entries.Total), time.Now().Format("2006-01-02")))
+	message += fmt.Sprintf("Subject: %s\r\n", fmt.Sprintf("📰 %s %s - %s", strconv.Itoa(entriesCount), updateTerm, time.Now().Format("2006-01-02")))
 	message += fmt.Sprintf("Content-Type: %s; charset=UTF-8\r\n", e.ContentType)
 	message += fmt.Sprintf("\r\n%s\r\n", body.String())
 
