@@ -46,8 +46,6 @@ func (c *Client) SetCategoryID(categoryName string) error {
 	return nil
 }
 
-// This returns unread entries, it requires currently that category_id has been set already with SetCategory method.
-// TODO: We don't support retrieving unread entries without actegory_id, in reality it's rarely a good idea.
 func (c *Client) GetUnreadEntries(limit int) (*miniflux.EntryResultSet, error) {
 	if c.categoryId == 0 {
 		// TODO: we should support cases when category_name is not set.
@@ -69,11 +67,6 @@ func (c *Client) GetUnreadEntries(limit int) (*miniflux.EntryResultSet, error) {
 	}
 
 	return entries, nil
-}
-
-// Marks entries as read, it requires currently that category_id has been set already with SetCategory method.
-func (c *Client) MarkCategoryAsRead() error {
-	return c.miniflux.MarkCategoryAsRead(c.categoryId)
 }
 
 func (c *Client) MarkAsRead(entries *miniflux.EntryResultSet) error {

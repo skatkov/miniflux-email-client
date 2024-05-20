@@ -53,16 +53,8 @@ func main() {
 		return
 	}
 
-	if limit == 0 {
-		err = client.MarkCategoryAsRead()
-		if err != nil {
-			log.Fatalf("failed to mark updates in category as read, due to an error: %v", err)
-		}
-	} else {
-		err = client.MarkAsRead(entries)
-		if err != nil {
-			log.Fatalf("failed to mark individual RSS updates as read, due to an error: %v", err)
-		}
+	err = client.MarkAsRead(entries)
+	if err != nil {
+		log.Fatalf("failed to mark individual RSS updates as read, due to an error: %v", err)
 	}
-
 }

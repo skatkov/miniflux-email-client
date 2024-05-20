@@ -53,7 +53,7 @@ func (e *Emailer) getMessage(toEmail string, entries *miniflux.EntryResultSet) s
 	switch e.ContentType {
 	case HTML:
 		for _, entry := range entries.Entries {
-			body.WriteString(fmt.Sprintf("<h2><a href=\"%s\">%s</a></h2><br/>", entry.URL, entry.Title))
+			body.WriteString(fmt.Sprintf("<h2><a href=\"%s\">%s</a></h2> by %s", entry.URL, entry.Title, entry.Author))
 			body.WriteString(fmt.Sprintf("<div>%s</div>", entry.Content))
 			body.WriteString("<hr>")
 		}
