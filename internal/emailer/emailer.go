@@ -40,7 +40,7 @@ const (
         <![endif]-->
 
         <style type="text/css">
-          img {border: 0; line-height: 100%; vertical-align: middle;}
+          img { width: 100%; height: 100%; object-fit: contain; border: 0; line-height: 100%; vertical-align: middle;}
           .col {font-size: 16px; line-height: 25px; vertical-align: top;}
 
           @media screen {
@@ -222,7 +222,7 @@ func (e *Emailer) getMessage(toEmail string, entries *miniflux.EntryResultSet) s
 	message += fmt.Sprintf("Content-Type: %s; charset=UTF-8\r\n", e.ContentType)
 
 	type EmailData struct {
-		Body string
+		Body template.HTML
 	}
 
 	tmpl, err := template.New("email").Parse(emailTemplate)
@@ -231,7 +231,7 @@ func (e *Emailer) getMessage(toEmail string, entries *miniflux.EntryResultSet) s
 	}
 
 	var finalBody bytes.Buffer
-	data := EmailData{Body: body.String()}
+	data := EmailData{Body: template.HTML(body.String())}
 
 	err = tmpl.Execute(&finalBody, data)
 	if err != nil {
