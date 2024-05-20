@@ -17,7 +17,7 @@ There are plenty of "RSS-over-email" services out there - mailbrew, briefcake or
 1. Fork this repo
 2. Retrieve miniflux API token
 3. Configure gmail smtp based on a [following guide](https://community.cloudflare.com/t/solved-how-to-use-gmail-smtp-to-send-from-an-email-address-which-uses-cloudflare-email-routing/382769/2)
-4. Modify `.github/workflows/daily_run.yml` file
+4. Modify `.github/workflows/runner.yml` file
 5. Add github/action secrets (SMTP_SERVER, SMTP_USERNAME and SMTP_PASSWORD are required)
 
 ## Github Action
