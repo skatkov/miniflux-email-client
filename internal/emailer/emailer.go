@@ -153,7 +153,13 @@ const (
               <table class="container" bgcolor="#FFFFFF" cellpadding="0" cellspacing="0" role="presentation" width="600">
                 <tr>
                   <td align="left">
-                    {{.Body}}
+                    <table class="full-width-sm" align="center" cellpadding="0" cellspacing="0" role="presentation" width="90%" style="margin: 0 auto;" >
+                      <tr>
+                        <td class="px-sm-16">
+                          {{.Body}}
+                        </td>
+                      </tr>
+                    </table>
                   </td>
                 </tr>
               </table>
