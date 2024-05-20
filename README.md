@@ -23,12 +23,5 @@ There are plenty of "RSS-over-email" services out there - mailbrew, briefcake or
 ## Github Action
 Every 3 months github will ask if you want to keep running daily actions. Click "yes", if you want to continue receiving updates.
 
-## Maintenance
-I use this project myself daily, it's not feature complete, but it works stably. I'd encourage leaving your feedback and contributions.
-
-Current plan includes:
-- [x] Generalize email configuration, so not only GMAIL could be used.
-- [x] Improve email design - add table of contents, improve template
-- [x] Introduce PLAIN TEXT emails
-- [x] Ability to limit number of RSS updates sent out daily
-- [x] make project easier to maintain (simplify, write tests and etc)
+## Email
+Email template is powered by [Acorn framework](http://docs.thememountain.com/acorn/).
