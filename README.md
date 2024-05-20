@@ -26,9 +26,7 @@ I use this project myself daily, it's not feature complete, but it works stably.
 
 Current plan includes:
 - [x] Generalize email configuration, so not only GMAIL could be used.
-- [ ] Improve email design - add table of contents, improve template
+- [x] Improve email design - add table of contents, improve template
 - [x] Introduce PLAIN TEXT emails
-- [ ] Ability to provide multiple categories
-- [ ] Ability to not provide any categories at all
-- [ ] Ability to limit number of RSS updates sent out daily
+- [x] Ability to limit number of RSS updates sent out daily
 - [x] make project easier to maintain (simplify, write tests and etc)
