@@ -26,6 +26,6 @@ jobs:
         SEND_TO: ${{ secrets.TO_EMAIL }}
         CGO_ENABLED: 0
         CATEGORY: All
-        LIMIT: 5
+        LIMIT: 10
       run: |
         go run main.go
