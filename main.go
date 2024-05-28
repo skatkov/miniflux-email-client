@@ -7,8 +7,6 @@ import (
 	"github.com/caarlos0/env/v9"
 	miniflux "github.com/skatkov/miniflux-email-client/internal/client"
 	"github.com/skatkov/miniflux-email-client/internal/emailer"
-
-	c "miniflux.app/client"
 )
 
 var (
@@ -30,8 +28,6 @@ func main() {
 	}
 	client := miniflux.NewClient(minifluxConfig)
 
-	var entries *c.EntryResultSet
-
 	if minifluxConfig.CategoryName != "" {
 		log.Printf("setting category to: %v", minifluxConfig.CategoryName)
 		err = client.SetCategoryID(minifluxConfig.CategoryName)
@@ -39,23 +35,16 @@ func main() {
 		if err != nil {
 			log.Fatalf("failed to set category: %v", err)
 		}
-		entries, err = client.GetUnreadCategoryEntries(minifluxConfig.Limit)
-
-		if err != nil {
-			log.Fatalf("failed to fetch RSS updates: %v", err)
-			return
-		}
-
 	} else {
 		log.Printf("category is not set, fetching all entries")
-
-		entries, err = client.GetUnreadEntries(minifluxConfig.Limit)
-
-		if err != nil {
-			log.Fatalf("failed to fetch RSS updates: %v", err)
-			return
-		}
 	}
+	entries, err := client.GetUnreadEntries(minifluxConfig.Limit)
+
+	if err != nil {
+		log.Fatalf("failed to fetch RSS updates: %v", err)
+		return
+	}
+
 	log.Printf("sending email to: %v", sendTo)
 	err = mailer.Send(sendTo, entries)
 

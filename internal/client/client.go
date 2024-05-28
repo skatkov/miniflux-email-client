@@ -54,31 +54,9 @@ func (c *Client) SetCategoryID(categoryName string) error {
 
 func (c *Client) GetUnreadEntries(limit int) (*miniflux.EntryResultSet, error) {
 	entries, err := c.miniflux.Entries(&miniflux.Filter{
-		Status: miniflux.EntryStatusUnread,
-		Limit:  limit,
-	})
-
-	if err != nil {
-		return nil, err
-	}
-
-	if entries.Total == 0 {
-		return nil, errors.New("no unread entries found")
-	}
-
-	return entries, nil
-}
-
-// TODO: Theoretically, there is no need for this separate method and everything could be merged into GetUnreadEntries. It can handle categories as weel.
-func (c *Client) GetUnreadCategoryEntries(limit int) (*miniflux.EntryResultSet, error) {
-	if c.categoryId == 0 {
-		return nil, errors.New("category_name is not set")
-	}
-
-	entries, err := c.miniflux.CategoryEntries(c.categoryId, &miniflux.Filter{
 		Status:     miniflux.EntryStatusUnread,
-		CategoryID: c.categoryId,
 		Limit:      limit,
+		CategoryID: c.categoryId,
 	})
 
 	if err != nil {
