@@ -15,7 +15,8 @@ type Client struct {
 type MinifluxConfig struct {
 	ApiUrl       string `env:"MINIFLUX_URL" envDefault:"https://reader.miniflux.app/"`
 	Token        string `env:"MINIFLUX_TOKEN,required"`
-	CategoryName string `env:"CATEGORY,required"`
+	CategoryName string `env:"CATEGORY"`
+	//TODO: Add LIMIT here, as other properties are currently used.
 }
 
 func NewClient(config MinifluxConfig) *Client {
@@ -47,8 +48,25 @@ func (c *Client) SetCategoryID(categoryName string) error {
 }
 
 func (c *Client) GetUnreadEntries(limit int) (*miniflux.EntryResultSet, error) {
+	entries, err := c.miniflux.Entries(&miniflux.Filter{
+		Status: miniflux.EntryStatusUnread,
+		Limit:  limit,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if entries.Total == 0 {
+		return nil, errors.New("no unread entries found")
+	}
+
+	return entries, nil
+}
+
+// TODO: Theoretically, there is no need for this separate method and everything could be merged into GetUnreadEntries. It can handle categories as weel.
+func (c *Client) GetUnreadCategoryEntries(limit int) (*miniflux.EntryResultSet, error) {
 	if c.categoryId == 0 {
-		// TODO: we should support cases when category_name is not set.
 		return nil, errors.New("category_name is not set")
 	}
 
