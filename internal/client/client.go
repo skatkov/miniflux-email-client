@@ -49,6 +49,11 @@ func (c *Client) SetCategoryID(categoryName string) error {
 			log.Printf("category_id set to: %v", c.categoryId)
 		}
 	}
+
+	if c.categoryId == 0 {
+		return errors.New("category not found")
+	}
+
 	return nil
 }
 

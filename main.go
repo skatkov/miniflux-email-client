@@ -34,6 +34,7 @@ func main() {
 
 		if err != nil {
 			log.Fatalf("failed to set category: %v", err)
+			return
 		}
 	} else {
 		log.Printf("category is not set, fetching all entries")
