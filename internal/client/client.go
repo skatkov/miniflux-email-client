@@ -16,7 +16,7 @@ type MinifluxConfig struct {
 	ApiUrl       string `env:"MINIFLUX_URL" envDefault:"https://reader.miniflux.app/"`
 	Token        string `env:"MINIFLUX_TOKEN,required"`
 	CategoryName string `env:"CATEGORY"`
-	//TODO: Add LIMIT here, as other properties are currently used.
+	Limit        int    `env:"LIMIT"`
 }
 
 func NewClient(config MinifluxConfig) *Client {
