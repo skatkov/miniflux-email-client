@@ -29,15 +29,15 @@ func main() {
 	client := miniflux.NewClient(minifluxConfig)
 
 	if minifluxConfig.CategoryName != "" {
-		log.Printf("setting category to: %v", minifluxConfig.CategoryName)
+		log.Printf("categoryName set to: %v", minifluxConfig.CategoryName)
 		err = client.SetCategoryID(minifluxConfig.CategoryName)
 
 		if err != nil {
-			log.Fatalf("failed to set category: %v", err)
+			log.Fatalf("failed to set categoryId: %v", err)
 			return
 		}
 	} else {
-		log.Printf("category is not set, fetching all entries")
+		log.Printf("categoryName is not set, fetching all entries")
 	}
 	entries, err := client.GetUnreadEntries(minifluxConfig.Limit)
 
@@ -56,6 +56,6 @@ func main() {
 
 	err = client.MarkAsRead(entries)
 	if err != nil {
-		log.Fatalf("failed to mark individual RSS updates as read, due to an error: %v", err)
+		log.Fatalf("failed to mark RSS updates as read, due to an error: %v", err)
 	}
 }
