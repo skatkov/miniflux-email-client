@@ -2,6 +2,7 @@ package client
 
 import (
 	"errors"
+	"fmt"
 	"log"
 
 	miniflux "miniflux.app/client"
@@ -17,6 +18,10 @@ type MinifluxConfig struct {
 	Token        string `env:"MINIFLUX_TOKEN,required"`
 	CategoryName string `env:"CATEGORY"`
 	Limit        int    `env:"LIMIT"`
+}
+
+func (c MinifluxConfig) String() string {
+	return fmt.Sprintf("ApiUrl: %s, Token: %s, CategoryName: %s, Limit: %d", c.ApiUrl, c.Token, c.CategoryName, c.Limit)
 }
 
 func NewClient(config MinifluxConfig) *Client {
