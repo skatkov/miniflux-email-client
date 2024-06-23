@@ -21,7 +21,7 @@ type MinifluxConfig struct {
 }
 
 func (c MinifluxConfig) String() string {
-	return fmt.Sprintf("ApiUrl: %s, Token: %s, CategoryName: %s, Limit: %d", c.ApiUrl, c.Token, c.CategoryName, c.Limit)
+	return fmt.Sprintf("ApiUrl: %s, CategoryName: %s, Limit: %d", c.ApiUrl, c.CategoryName, c.Limit)
 }
 
 func NewClient(config MinifluxConfig) *Client {
@@ -30,11 +30,6 @@ func NewClient(config MinifluxConfig) *Client {
 		miniflux: miniflux.New(config.ApiUrl, config.Token),
 	}
 }
-
-// To do operation on categories, we need to retrieve category_id.
-// Please note that category_id and category_name re different values, so we need to map appropriate category_id's.
-//
-// TODO: it's possible to set multiple categories, but support so far has not been tested.
 
 func (c *Client) SetCategoryID(categoryName string) error {
 	categories, err := c.miniflux.Categories()
