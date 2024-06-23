@@ -46,7 +46,7 @@ func main() {
 		return
 	}
 
-	log.Printf("sending email to: %v", sendTo)
+	log.Printf("sending email")
 	err = mailer.Send(sendTo, &minifluxConfig.CategoryName, entries)
 
 	if err != nil {
