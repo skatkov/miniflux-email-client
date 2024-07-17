@@ -1,27 +1,33 @@
 # Miniflux Email Client
-Miniflux Client to send feed updates over email.
 
-It's perfect "no-cost" solution based on github/smtp for people who always forget to check RSS readers for updates, but never miss emails.
+A Miniflux Client that sends feed updates via email.
 
-Just Fork it! (c)
+This is a perfect "no-cost" solution based on GitHub and SMTP for people who often forget to check RSS readers for updates but never miss emails.
+
+Just Fork it! ©
 
 ## Background
-There are plenty of "RSS-over-email" services out there - mailbrew, briefcake or tacodigest as example. This project aims to rebuild essential features of those services, but using git + CI + SMTP. In most cases, these things could be used free of charge and available with open source github/gitlab repo.
+
+While there are numerous "RSS-over-email" services available, such as Mailbrew, Briefcake, or Tacodigest, this project aims to recreate essential features of those services using Git, CI, and SMTP. In most cases, these tools can be used free of charge and are available with open-source GitHub/GitLab repositories.
 
 ## Prerequisites
-- Github repo + CI support
+
+- GitHub repository with CI support
 - A Miniflux instance with an account
-- SMTP account (I use gmail, but make sure it's not you're main gmail account if you do)
+- SMTP account (Gmail is recommended, but ensure it's not your main Gmail account if you choose to use it)
 
 ## Setup
-1. Fork this repo
-2. Retrieve miniflux API token
-3. Configure gmail smtp based on a [following guide](https://community.cloudflare.com/t/solved-how-to-use-gmail-smtp-to-send-from-an-email-address-which-uses-cloudflare-email-routing/382769/2)
-4. Modify `.github/workflows/runner.yml` file
-5. Add github/action secrets (SMTP_SERVER, SMTP_USERNAME and SMTP_PASSWORD are required)
 
-## Github Action
-Every 3 months github will ask if you want to keep running daily actions. Click "yes", if you want to continue receiving updates.
+1. Fork this repository
+2. Retrieve your Miniflux API token
+3. Configure Gmail SMTP by following this [guide](https://community.cloudflare.com/t/solved-how-to-use-gmail-smtp-to-send-from-an-email-address-which-uses-cloudflare-email-routing/382769/2)
+4. Modify the `.github/workflows/runner.yml` file
+5. Add GitHub Action secrets (SMTP_SERVER, SMTP_USERNAME, and SMTP_PASSWORD are required)
+
+## GitHub Action
+
+Every 3 months, GitHub will ask if you want to continue running daily actions. Click "Yes" if you wish to keep receiving updates.
 
 ## Email
-Email template is powered by [Acorn framework](http://docs.thememountain.com/acorn/).
+
+The email template is powered by the [Acorn framework](http://docs.thememountain.com/acorn/).
