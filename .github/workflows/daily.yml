@@ -19,7 +19,7 @@ jobs:
 
     - name: Check News updates and send them over email.
       env:
-        MINIFLUX_URL: "https://reader.miniflux.app/v1/"
+        MINIFLUX_URL: "https://mf.gobunov.com/v1/"
         MINIFLUX_TOKEN: ${{ secrets.MINIFLUX_TOKEN }}
         SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
         SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
