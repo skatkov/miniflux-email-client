@@ -180,6 +180,7 @@ type SMTPConfig struct {
 	Port     int    `env:"SMTP_PORT" envDefault:"587"`
 	Username string `env:"SMTP_USERNAME,required"`
 	Password string `env:"SMTP_PASSWORD,required"`
+	From     string `env:"SEND_FROM,required"`
 }
 
 func NewEmailer(config SMTPConfig, contentType MimeType) *Emailer {
@@ -197,10 +198,10 @@ func (e *Emailer) Send(toEmail string, subject *string, entries *miniflux.EntryR
 	a := e.SMTP
 	auth := smtp.PlainAuth("", a.Username, a.Password, a.Server)
 
-	return smtp.SendMail(a.Server+":"+fmt.Sprint(a.Port), auth, a.Username, []string{toEmail}, []byte(e.getMessage(toEmail, subject, entries)))
+	return smtp.SendMail(a.Server+":"+fmt.Sprint(a.Port), auth, a.From, []string{toEmail}, []byte(e.getMessage(a.From, toEmail, subject, entries)))
 }
 
-func (e *Emailer) getMessage(toEmail string, subject *string, entries *miniflux.EntryResultSet) string {
+func (e *Emailer) getMessage(fromEmail string, toEmail string, subject *string, entries *miniflux.EntryResultSet) string {
 	var body bytes.Buffer
 
 	switch e.ContentType {
@@ -223,7 +224,8 @@ func (e *Emailer) getMessage(toEmail string, subject *string, entries *miniflux.
 		updateTerm = "Update"
 	}
 
-	message := fmt.Sprintf("To: %s\r\n", []string{toEmail})
+	message := fmt.Sprintf("From: %s\r\n", fromEmail)
+	message += fmt.Sprintf("To: %s\r\n", toEmail)
 	message += fmt.Sprintf("Subject: %s\r\n", fmt.Sprintf("📰 %s %s - %s %s", strconv.Itoa(entriesCount), updateTerm, *subject, time.Now().Format("2006-01-02")))
 	message += fmt.Sprintf("Content-Type: %s; charset=UTF-8\r\n", e.ContentType)
 
