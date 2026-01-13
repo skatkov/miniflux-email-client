@@ -24,6 +24,31 @@ func TestEmailerGetAdapter(t *testing.T) {
 	assert.Equal(t, "testpass", emailer.SMTP.Password)
 }
 
+func TestNewEmailerFromFallback(t *testing.T) {
+	cfg := SMTPConfig{
+		Server:   "smtp.gmail.com",
+		Port:     587,
+		Username: "user@example.com",
+		Password: "pass",
+	}
+	emailer := NewEmailer(cfg, HTML)
+
+	assert.Equal(t, "user@example.com", emailer.SMTP.From)
+}
+
+func TestNewEmailerFromExplicit(t *testing.T) {
+	cfg := SMTPConfig{
+		Server:   "smtp.gmail.com",
+		Port:     587,
+		Username: "user@example.com",
+		Password: "pass",
+		From:     "sender@example.com",
+	}
+	emailer := NewEmailer(cfg, HTML)
+
+	assert.Equal(t, "sender@example.com", emailer.SMTP.From)
+}
+
 // entries mock
 /* var entries miniflux.Entries = miniflux.Entries{
 	&miniflux.Entry{
