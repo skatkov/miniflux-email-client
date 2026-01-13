@@ -180,12 +180,15 @@ type SMTPConfig struct {
 	Port     int    `env:"SMTP_PORT" envDefault:"587"`
 	Username string `env:"SMTP_USERNAME,required"`
 	Password string `env:"SMTP_PASSWORD,required"`
-	From     string `env:"SEND_FROM,required"`
+	From     string `env:"SEND_FROM"`
 }
 
 func NewEmailer(config SMTPConfig, contentType MimeType) *Emailer {
 	if contentType == "" {
 		contentType = TEXT
+	}
+	if config.From == "" {
+		config.From = config.Username
 	}
 
 	return &Emailer{
