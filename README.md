@@ -25,6 +25,23 @@ While there are numerous "RSS-over-email" services available, such as Mailbrew, 
 4. Modify the `.github/workflows/runner.yml` file
 5. Add GitHub Action secrets (SMTP_SERVER, SMTP_USERNAME, and SMTP_PASSWORD are required)
 
+## Environment Variables
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `MINIFLUX_URL` | No | `https://reader.miniflux.app/` | Miniflux instance URL |
+| `MINIFLUX_TOKEN` | Yes | - | Miniflux API token |
+| `CATEGORY` | No | - | Filter entries by category name |
+| `LIMIT` | No | - | Maximum number of entries to fetch |
+| `SMTP_SERVER` | No | `smtp.gmail.com` | SMTP server hostname |
+| `SMTP_PORT` | No | `587` | SMTP server port |
+| `SMTP_USERNAME` | Yes | - | SMTP authentication username |
+| `SMTP_PASSWORD` | Yes | - | SMTP authentication password |
+| `SEND_FROM` | No | `SMTP_USERNAME` | Email sender address |
+| `SEND_TO` | Yes | - | Email recipient address |
+
+## GitHub Action
+
 Every 3 months, GitHub will ask if you want to continue running daily actions. Click "Yes" if you wish to keep receiving updates.
 
 ## Self-Hosted
